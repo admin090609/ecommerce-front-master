@@ -11,6 +11,7 @@ import CartIcon from "@/components/icons/CartIcon";
 import { useContext } from "react";
 import { CartContext } from "@/components/CartContext";
 import { useState } from 'react';
+import { useRouter } from "next/router";
 
 const ColWrapper = styled.div`
   display: grid;
@@ -48,22 +49,36 @@ const OptionButton = styled.button`
 `;
 
 export default function ProductPage({ product }) {
+  const router = useRouter();
   const { addProduct } = useContext(CartContext);
-
   const [selectedOptions, setSelectedOptions] = useState({});
+  
 
-  const handleButtonClick = (optionIndex, individualOption) => {
-    const newSelectedOptions = { ...selectedOptions };
-    if (!newSelectedOptions[product._id]) {
-      newSelectedOptions[product._id] = {};
-    }
-    newSelectedOptions[product._id][optionIndex] = individualOption;
-    setSelectedOptions(newSelectedOptions);
-  };
+
+const handleButtonClick = (optionIndex, individualOption) => {
+  const newSelectedOptions = { ...selectedOptions };
+  if (!newSelectedOptions[product._id]) {
+    newSelectedOptions[product._id] = {};
+  }
+  newSelectedOptions[product._id][optionIndex] = individualOption;
+  setSelectedOptions(newSelectedOptions);
+};
 
   const addToCart = () => {
+    console.log('Product added to cart:', product, selectedOptions);
     addProduct(product._id, selectedOptions, product);
+    router.push({
+      pathname: '/cart',
+      query: { selectedOptions: JSON.stringify(selectedOptions) },
+    });
   };
+
+  // Assuming you have a function to navigate to the cart page
+const navigateToCart = () => {
+  // Pass selectedOptions to the cart page
+  router.push(`/cart?selectedOptions=${JSON.stringify(selectedOptions)}`);
+};
+
 
   return (
     <>
@@ -78,11 +93,11 @@ export default function ProductPage({ product }) {
             <p>{product.description}</p>
 
             <div>
-              {product.options.map((option, optionIndex) => (
+              {product.options?.map((option, optionIndex) => (
                 <div key={optionIndex}>
                   {option.title}
                   <br />
-                  {option.options.map((individualOption, individualOptionIndex) => (
+                  {option.options?.map((individualOption, individualOptionIndex) => (
                     <OptionButton
                       key={individualOptionIndex}
                       isActive={selectedOptions[product._id]?.[optionIndex] === individualOption}
@@ -118,7 +133,6 @@ export async function getServerSideProps(context) {
   await mongooseConnect();
   const { id } = context.query;
   const product = await Product.findById(id);
-
   return {
     props: {
       product: JSON.parse(JSON.stringify(product)),
@@ -129,14 +143,13 @@ export async function getServerSideProps(context) {
 function getSelectedOptionsString(selectedOptions) {
   let resultString = "";
   for (const productId in selectedOptions) {
-    resultString += `${productId}: `;
     const productOptions = selectedOptions[productId];
     for (const optionIndex in productOptions) {
       resultString += `${productOptions[optionIndex]}, `;
     }
-    resultString = resultString.slice(0, -2); // Remove the trailing comma and space
+    resultString = resultString.slice(0, -2);
     resultString += "; ";
   }
-  resultString = resultString.slice(0, -2); // Remove the trailing semicolon and space
+  resultString = resultString.slice(0, -2);
   return resultString;
 }

@@ -7,7 +7,19 @@ export function CartContextProvider({ children }) {
   const [cartProducts, setCartProducts] = useState([]);
 
   useEffect(() => {
-    if (cartProducts?.length > 0) {
+    console.log('Cart Products:', cartProducts);
+  }, [cartProducts]);
+
+  useEffect(() => {
+    console.log('Local Storage Cart Products (Before):', ls?.getItem('cart'));
+    if (ls && ls.getItem('cart')) {
+      setCartProducts(JSON.parse(ls.getItem('cart')));
+    }
+    console.log('Local Storage Cart Products (After):', cartProducts);
+  }, []);
+
+  useEffect(() => {
+    if (cartProducts?.length >= 0) {
       ls?.setItem('cart', JSON.stringify(cartProducts));
     }
   }, [cartProducts]);
@@ -18,36 +30,29 @@ export function CartContextProvider({ children }) {
     }
   }, []);
 
+
   function addProduct(productId) {
-    setCartProducts(prev => {
-      if (!prev.includes(productId)) {
-        return [...prev, productId];
-      }
-      return prev;
-    });
+    setCartProducts(prev => [...prev, productId]);
   }
 
   function removeProduct(productId) {
     setCartProducts(prev => {
       const pos = prev.indexOf(productId);
       if (pos !== -1) {
-        const updatedCart = prev.filter((value, index) => index !== pos);
-        ls?.setItem('cart', JSON.stringify(updatedCart)); // Update local storage
-        return updatedCart;
+        return prev.filter((value, index) => index !== pos);
       }
       return prev;
     });
   }
 
   function clearCart() {
+    console.log('Clearing Cart');
     setCartProducts([]);
-    ls?.removeItem('cart'); // Clear local storage when the cart is cleared
   }
 
+
   return (
-    <CartContext.Provider
-      value={{ cartProducts, setCartProducts, addProduct, removeProduct, clearCart }}
-    >
+    <CartContext.Provider value={{ cartProducts, setCartProducts, addProduct, removeProduct, clearCart }}>
       {children}
     </CartContext.Provider>
   );

@@ -9,7 +9,6 @@ import Table from "@/components/Table";
 import Input from "@/components/Input";
 import { mongooseConnect } from "@/lib/mongoose";
 import { Product } from "@/models/Product";
-
 import { useRouter } from 'next/router';
 
 const ColumnsWrapper = styled.div`
@@ -70,7 +69,7 @@ const CityHolder = styled.div`
   gap: 5px;
 `;
 
-export default function CartPage() {
+export default function CartPage({ product }) {
   const { cartProducts, addProduct, removeProduct, clearCart } = useContext(CartContext);
   const [products, setProducts] = useState([]);
   const [name, setName] = useState('');
@@ -80,17 +79,53 @@ export default function CartPage() {
   const [streetAddress, setStreetAddress] = useState('');
   const [country, setCountry] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
+  const router = useRouter();
+  const [selectedOptions, setSelectedOptions] = useState({});
+  const { selectedOptions: selectedOptionsFromQuery } = router.query;
 
   useEffect(() => {
-    if (cartProducts.length > 0) {
-      axios.post('/api/cart', { ids: cartProducts })
-        .then(response => {
-          setProducts(response.data);
-        })
-    } else {
-      setProducts([]);
+    // Parse and update selectedOptions state when the component mounts
+    if (selectedOptionsFromQuery) {
+      const parsedOptions = JSON.parse(selectedOptionsFromQuery);
+      setSelectedOptions(parsedOptions);
     }
+  }, [selectedOptionsFromQuery]);
+
+  
+
+  products.map(product => {
+    // Check if product is not null or undefined before accessing _id
+    if (product && product._id) {
+      const productId = product._id; // Access the product ID
+      const optionIndex = 0;
+
+      // Now you can use the productId dynamically, for example, to access selectedOptions
+      const selectedOption = selectedOptions[productId];
+      // Use the selectedOption in your logic
+      const optionValue = selectedOption?.[0]; // Accessing the value of the property with key '0'
+    } else {
+      console.warn("Invalid product:", product);
+    }
+  });
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        if (cartProducts.length > 0) {
+          const response = await axios.post('/api/cart', { ids: cartProducts });
+          setProducts(response.data);
+        } else {
+          setProducts([]);
+        }
+      } catch (error) {
+        console.error('Error fetching products:', error);
+        // Handle the error as needed (e.g., show a user-friendly message)
+      }
+    };
+
+    fetchProducts();
   }, [cartProducts]);
+
 
   useEffect(() => {
     if (typeof window === 'undefined') {
@@ -109,8 +144,6 @@ export default function CartPage() {
   function lessOfThisProduct(id) {
     removeProduct(id);
   }
-
-  const router = useRouter();
 
   async function goToPayment() {
     const response = await axios.post('/api/checkout', {
@@ -146,6 +179,8 @@ export default function CartPage() {
     );
   }
 
+
+
   return (
     <>
       <Header />
@@ -167,52 +202,43 @@ export default function CartPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {products.map(product => (
-                    <tr key={product._id}>
-                      <ProductInfoCell>
-                        <ProductImageBox>
-                          <img src={product.images[0]} alt="" />
-                        </ProductImageBox>
-                        <div>
-                          {product.title} {product.options && product.options.map((option, optionIndex) => (
+                  {[...new Set(cartProducts)].map((productId, index) => {
+                    const productDetails = products.find(p => p._id === productId);
+                    const optionIndex = 1;
+                    const selectedOption = selectedOptions[productId];
+
+                    return (
+                      <tr key={index}>
+                        <ProductInfoCell>
+                          <ProductImageBox>
+                            <img src={productDetails.images[0]} alt="" />
+                          </ProductImageBox>
+                          <div>
+                            {productDetails.title}
+                          </div>
+                        </ProductInfoCell>
+                        <td>
+                          {/* Display selected options */}
+                          {productDetails.options?.map((option, optionIndex) => (
                             <div key={optionIndex}>
-                              {option.title}:
-                              {option.options && option.options.map((individualOption, individualOptionIndex) => (
-                                <div key={individualOptionIndex}>
-                                  {product.selectedOptions?.[optionIndex] === individualOption && (
-                                    <span>{individualOption}</span>
-                                  )}
-                                </div>
-                              ))}
+                              {option.title}:{' '}
+                              {selectedOption?.[optionIndex]}
                             </div>
                           ))}
-                        </div>
-                      </ProductInfoCell>
-                      <td>
-                        {/* Display selected options */}
-                        {cartProducts
-                          .filter(id => id === product._id)
-                          .map((productId, index) => (
-                            <div key={index}>
-                              {/* Display selected options for the corresponding product */}
-                              {products
-                                .find(p => p._id === productId)
-                                ?.selectedOptions?.join(', ')}
-                            </div>
-                          ))}
-                      </td>
-                      <td>
-                        <Button onClick={() => lessOfThisProduct(product._id)}>-</Button>
-                        <QuantityLabel>
-                          {cartProducts.filter(id => id === product._id).length}
-                        </QuantityLabel>
-                        <Button onClick={() => moreOfThisProduct(product._id)}>+</Button>
-                      </td>
-                      <td>
-                        ${cartProducts.filter(id => id === product._id).length * product.price}
-                      </td>
-                    </tr>
-                  ))}
+                        </td>
+                        <td>
+                          <Button onClick={() => lessOfThisProduct(productDetails._id)}>-</Button>
+                          <QuantityLabel>
+                            {cartProducts.filter(id => id === productDetails._id).length}
+                          </QuantityLabel>
+                          <Button onClick={() => moreOfThisProduct(productDetails._id)}>+</Button>
+                        </td>
+                        <td>
+                          ${cartProducts.filter(id => id === productDetails._id).length * productDetails.price}
+                        </td>
+                      </tr>
+                    );
+                  })}
                   <tr>
                     <td></td>
                     <td></td>
@@ -275,11 +301,13 @@ export async function getServerSideProps(context) {
   const { id } = context.query;
   const product = await Product.findById(id);
 
-  // Pass product IDs to the cart page
+  // Use context.req.cookies.cartProducts directly
+  const cartProducts = context.req.cookies.cartProducts || [];
+
   return {
     props: {
       product: JSON.parse(JSON.stringify(product)),
-      cartProducts: context.req.cookies.cartProducts || [], // or however you manage cartProducts
+      cartProducts: cartProducts,
     },
   };
 }
