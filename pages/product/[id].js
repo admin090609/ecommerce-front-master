@@ -10,7 +10,7 @@ import Button from "@/components/Button";
 import CartIcon from "@/components/icons/CartIcon";
 import { useContext } from "react";
 import { CartContext } from "@/components/CartContext";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from "next/router";
 
 const ColWrapper = styled.div`
@@ -51,33 +51,49 @@ const OptionButton = styled.button`
 export default function ProductPage({ product }) {
   const router = useRouter();
   const { addProduct } = useContext(CartContext);
-  const [selectedOptions, setSelectedOptions] = useState({});
-  
+  const [selectedOptions, setSelectedOptions] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const storedOptions = localStorage.getItem('selectedOptions');
+      console.log('Stored Options (Initial):', storedOptions);
+      return storedOptions ? JSON.parse(storedOptions) : {};
+    }
+    return {};
+  });
 
+  const handleButtonClick = (optionIndex, individualOption) => {
+    const newSelectedOptions = { ...selectedOptions };
+    if (!newSelectedOptions[product._id]) {
+      newSelectedOptions[product._id] = {};
+    }
+    newSelectedOptions[product._id][optionIndex] = individualOption;
+    setSelectedOptions(newSelectedOptions);
 
-const handleButtonClick = (optionIndex, individualOption) => {
-  const newSelectedOptions = { ...selectedOptions };
-  if (!newSelectedOptions[product._id]) {
-    newSelectedOptions[product._id] = {};
-  }
-  newSelectedOptions[product._id][optionIndex] = individualOption;
-  setSelectedOptions(newSelectedOptions);
-};
+    // Update localStorage only if running in the browser
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('selectedOptions', JSON.stringify(newSelectedOptions));
+    }
+  };
 
   const addToCart = () => {
     console.log('Product added to cart:', product, selectedOptions);
     addProduct(product._id, selectedOptions, product);
     router.push({
       pathname: '/cart',
-      query: { selectedOptions: JSON.stringify(selectedOptions) },
+      query: {
+        selectedOptions: JSON.stringify(selectedOptions),
+      },
     });
   };
 
-  // Assuming you have a function to navigate to the cart page
-const navigateToCart = () => {
-  // Pass selectedOptions to the cart page
-  router.push(`/cart?selectedOptions=${JSON.stringify(selectedOptions)}`);
-};
+  useEffect(() => {
+    console.log('Selected Options (Updated):', selectedOptions);
+  }, [selectedOptions]);
+
+  // Reset selectedOptions when the component is mounted
+  useEffect(() => {
+    setSelectedOptions({});
+  }, []);
+
 
 
   return (
@@ -108,7 +124,11 @@ const navigateToCart = () => {
                 </div>
               ))}
               <div>
-                Selected Options: {getSelectedOptionsString(selectedOptions)}
+                {Object.keys(selectedOptions[product._id] || {}).length > 0 && (
+                  <div>
+                    Selected Options: {getSelectedOptionsString(selectedOptions)}
+                  </div>
+                )}
               </div>
             </div>
 

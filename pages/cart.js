@@ -74,10 +74,7 @@ export default function CartPage({ product }) {
   const [products, setProducts] = useState([]);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [city, setCity] = useState('');
-  const [postalCode, setPostalCode] = useState('');
-  const [streetAddress, setStreetAddress] = useState('');
-  const [country, setCountry] = useState('');
+  const [phone, setPhone] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
   const router = useRouter();
   const [selectedOptions, setSelectedOptions] = useState({});
@@ -91,13 +88,10 @@ export default function CartPage({ product }) {
     }
   }, [selectedOptionsFromQuery]);
 
-  
-
   products.map(product => {
     // Check if product is not null or undefined before accessing _id
     if (product && product._id) {
       const productId = product._id; // Access the product ID
-      const optionIndex = 0;
 
       // Now you can use the productId dynamically, for example, to access selectedOptions
       const selectedOption = selectedOptions[productId];
@@ -107,6 +101,28 @@ export default function CartPage({ product }) {
       console.warn("Invalid product:", product);
     }
   });
+
+  const handleButtonClick = (optionIndex, individualOption) => {
+    const newSelectedOptions = { ...selectedOptions };
+    if (!newSelectedOptions[product._id]) {
+      newSelectedOptions[product._id] = {};
+    }
+    newSelectedOptions[product._id][optionIndex] = individualOption;
+    setSelectedOptions(newSelectedOptions);
+
+    // Update localStorage only if running in the browser
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('selectedOptions', JSON.stringify(newSelectedOptions));
+    }
+  };
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const storedOptions = localStorage.getItem('selectedOptions');
+      console.log('Stored Options (Initial):', storedOptions);
+      setSelectedOptions(storedOptions ? JSON.parse(storedOptions) : {});
+    }
+  }, []);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -147,8 +163,7 @@ export default function CartPage({ product }) {
 
   async function goToPayment() {
     const response = await axios.post('/api/checkout', {
-      name, email, city, postalCode, streetAddress, country,
-      cartProducts,
+      name, email, phone, cartProducts,
     });
 
     if (response.data.url) {
@@ -262,28 +277,11 @@ export default function CartPage({ product }) {
                 value={email}
                 name="email"
                 onChange={ev => setEmail(ev.target.value)} />
-              <CityHolder>
-                <Input type="text"
-                  placeholder="City"
-                  value={city}
-                  name="city"
-                  onChange={ev => setCity(ev.target.value)} />
-                <Input type="text"
-                  placeholder="Postal Code"
-                  value={postalCode}
-                  name="postalCode"
-                  onChange={ev => setPostalCode(ev.target.value)} />
-              </CityHolder>
               <Input type="text"
-                placeholder="Street Address"
-                value={streetAddress}
-                name="streetAddress"
-                onChange={ev => setStreetAddress(ev.target.value)} />
-              <Input type="text"
-                placeholder="Country"
-                value={country}
-                name="country"
-                onChange={ev => setCountry(ev.target.value)} />
+                placeholder="Number"
+                value={phone}
+                name="number"
+                onChange={ev => setPhone(ev.target.value)} />
               <Button black block
                 onClick={goToPayment}>
                 Continue to payment

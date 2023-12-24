@@ -5,6 +5,7 @@ export const CartContext = createContext({});
 export function CartContextProvider({ children }) {
   const ls = typeof window !== "undefined" ? window.localStorage : null;
   const [cartProducts, setCartProducts] = useState([]);
+  const [cartSelectedOptions, setCartSelectedOptions] = useState({});
 
   useEffect(() => {
     console.log('Cart Products:', cartProducts);
@@ -30,9 +31,12 @@ export function CartContextProvider({ children }) {
     }
   }, []);
 
-
-  function addProduct(productId) {
+  function addProduct(productId, selectedOptions, product) {
     setCartProducts(prev => [...prev, productId]);
+    setCartSelectedOptions(prev => ({
+      ...prev,
+      [productId]: selectedOptions || {},
+    }));
   }
 
   function removeProduct(productId) {
@@ -43,16 +47,21 @@ export function CartContextProvider({ children }) {
       }
       return prev;
     });
+    setCartSelectedOptions(prev => {
+      const updatedOptions = { ...prev };
+      delete updatedOptions[productId];
+      return updatedOptions;
+    });
   }
 
   function clearCart() {
     console.log('Clearing Cart');
     setCartProducts([]);
+    setCartSelectedOptions({});
   }
 
-
   return (
-    <CartContext.Provider value={{ cartProducts, setCartProducts, addProduct, removeProduct, clearCart }}>
+    <CartContext.Provider value={{ cartProducts, cartSelectedOptions, addProduct, removeProduct, clearCart }}>
       {children}
     </CartContext.Provider>
   );
