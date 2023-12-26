@@ -1,4 +1,6 @@
 import { createContext, useEffect, useState } from "react";
+import isEqual from 'lodash/isEqual';
+
 
 export const CartContext = createContext({});
 
@@ -32,21 +34,39 @@ export function CartContextProvider({ children }) {
   }, []);
 
   function addProduct(productId, selectedOptions, product) {
-    setCartProducts(prev => [...prev, productId]);
-    setCartSelectedOptions(prev => ({
-      ...prev,
-      [productId]: selectedOptions || {},
-    }));
+    const existingProduct = cartProducts.find(
+      (item) =>
+        item.productId === productId &&
+        isEqual(item.options, selectedOptions)
+    );
+
+    if (existingProduct) {
+      // If the product already exists, update its quantity
+      setCartProducts((prev) =>
+        prev.map((item) =>
+          item === existingProduct
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        )
+      );
+    } else {
+      // If the product doesn't exist, add it as a new cart item with quantity 1
+      const newCartItem = {
+        productId,
+        options: selectedOptions || {},
+        productDetails: product, // Assuming 'product' contains details of the product
+        quantity: 1, // Initial quantity for a new product
+      };
+      setCartProducts((prev) => [...prev, newCartItem]);
+    }
   }
 
-  function removeProduct(productId) {
-    setCartProducts(prev => {
-      const pos = prev.indexOf(productId);
-      if (pos !== -1) {
-        return prev.filter((value, index) => index !== pos);
-      }
-      return prev;
-    });
+
+  function removeProduct(productId, selectedOptions) {
+    setCartProducts(prev => prev.filter(item =>
+      item.productId !== productId || JSON.stringify(item.options) !== JSON.stringify(selectedOptions)
+    ));
+
     setCartSelectedOptions(prev => {
       const updatedOptions = { ...prev };
       delete updatedOptions[productId];

@@ -127,15 +127,16 @@ export default function CartPage({ product }) {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        if (cartProducts.length > 0) {
-          const response = await axios.post('/api/cart', { ids: cartProducts });
+        // Get unique product IDs from cartProducts
+        const uniqueProductIds = [...new Set(cartProducts.map(item => item.productId))];
+        if (uniqueProductIds.length > 0) {
+          const response = await axios.post('/api/cart', { ids: uniqueProductIds });
           setProducts(response.data);
         } else {
           setProducts([]);
         }
       } catch (error) {
         console.error('Error fetching products:', error);
-        // Handle the error as needed (e.g., show a user-friendly message)
       }
     };
 
@@ -172,11 +173,17 @@ export default function CartPage({ product }) {
     }
   }
 
+  
   let total = 0;
-  for (const productId of cartProducts) {
-    const price = products.find(p => p._id === productId)?.price || 0;
-    total += price;
-  }
+
+  cartProducts.forEach(cartItem => {
+    const productDetails = products.find(p => p._id === cartItem.productId);
+    if (productDetails) {
+      total += cartItem.quantity * productDetails.price; // Assuming cartItem has a 'quantity' property
+    }
+  });
+
+
 
   if (isSuccess) {
     return (
@@ -203,9 +210,8 @@ export default function CartPage({ product }) {
         <ColumnsWrapper>
           <Box>
             <h2>Cart</h2>
-            {!cartProducts?.length && (
-              <div>Your cart is empty</div>
-            )}
+            {!cartProducts.length && <div>Your cart is empty</div>}
+
             {products?.length > 0 && (
               <Table>
                 <thead>
@@ -217,47 +223,36 @@ export default function CartPage({ product }) {
                   </tr>
                 </thead>
                 <tbody>
-                  {[...new Set(cartProducts)].map((productId, index) => {
-                    const productDetails = products.find(p => p._id === productId);
-                    const optionIndex = 1;
-                    const selectedOption = selectedOptions[productId];
+                  {cartProducts.map((cartItem, index) => {
+                    const productDetails = products.find(p => p._id === cartItem.productId);
+                    if (!productDetails) return null;
 
                     return (
                       <tr key={index}>
                         <ProductInfoCell>
                           <ProductImageBox>
-                            <img src={productDetails.images[0]} alt="" />
+                            <img src={productDetails.images[0]} alt={productDetails.title} />
                           </ProductImageBox>
                           <div>
                             {productDetails.title}
                           </div>
                         </ProductInfoCell>
                         <td>
-                          {/* Display selected options */}
-                          {productDetails.options?.map((option, optionIndex) => (
-                            <div key={optionIndex}>
-                              {option.title}:{' '}
-                              {selectedOption?.[optionIndex]}
-                            </div>
+                          {Object.entries(cartItem.options).map(([optionKey, optionValue]) => (
+                            <div key={optionKey}>{`${optionValue[0]}`}</div>
                           ))}
                         </td>
                         <td>
-                          <Button onClick={() => lessOfThisProduct(productDetails._id)}>-</Button>
-                          <QuantityLabel>
-                            {cartProducts.filter(id => id === productDetails._id).length}
-                          </QuantityLabel>
-                          <Button onClick={() => moreOfThisProduct(productDetails._id)}>+</Button>
+                          <Button onClick={() => removeProduct(cartItem.productId, cartItem.options)}>-</Button>
+                          <QuantityLabel>{cartItem.quantity}</QuantityLabel>
+                          <Button onClick={() => addProduct(cartItem.productId, cartItem.options)}>+</Button>
                         </td>
-                        <td>
-                          ${cartProducts.filter(id => id === productDetails._id).length * productDetails.price}
-                        </td>
+                        <td>${cartItem.quantity * productDetails.price}</td>
                       </tr>
                     );
                   })}
                   <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td colSpan={3}>Total</td>
                     <td>${total}</td>
                   </tr>
                 </tbody>

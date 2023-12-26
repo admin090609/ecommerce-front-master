@@ -1,8 +1,8 @@
 import Link from "next/link";
 import styled from "styled-components";
 import Center from "@/components/Center";
-import {useContext, useState} from "react";
-import {CartContext} from "@/components/CartContext";
+import { useContext, useState } from "react";
+import { CartContext } from "@/components/CartContext";
 import BarsIcon from "@/components/icons/Bars";
 
 const StyledHeader = styled.header`
@@ -63,8 +63,13 @@ const NavButton = styled.button`
 `;
 
 export default function Header() {
-  const {cartProducts} = useContext(CartContext);
-  const [mobileNavActive,setMobileNavActive] = useState(false);
+  const { cartProducts } = useContext(CartContext);
+  const [mobileNavActive, setMobileNavActive] = useState(false);
+
+  const totalQuantity = cartProducts.reduce((acc, cartItem) => {
+    return acc + (cartItem.quantity || 1); // Assuming each item has a 'quantity' property
+  }, 0);
+
   return (
     <StyledHeader>
       <Center>
@@ -75,7 +80,7 @@ export default function Header() {
             <NavLink href={'/products'}>All products</NavLink>
             <NavLink href={'/categories'}>Categories</NavLink>
             <NavLink href={'/account'}>Account</NavLink>
-            <NavLink href={'/cart'}>Cart ({cartProducts.length})</NavLink>
+            <NavLink href={'/cart'}>Cart ({totalQuantity})</NavLink>
           </StyledNav>
           <NavButton onClick={() => setMobileNavActive(prev => !prev)}>
             <BarsIcon />
