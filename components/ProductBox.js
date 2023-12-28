@@ -63,7 +63,7 @@ export default function ProductBox({ _id, title, description, price, images, cat
   const { addProduct } = useContext(CartContext);
   const url = '/product/' + _id;
 
- 
+
 
   return (
     <ProductWrapper>
@@ -73,15 +73,8 @@ export default function ProductBox({ _id, title, description, price, images, cat
         </div>
       </WhiteBox>
       <ProductInfoBox>
-        
         <Title href={url}>{title}</Title>
         <PriceRow>
-          <Price>
-            ${price}
-          </Price>
-          <Button block onClick={() => addProduct(_id)} primary outline>
-            Add to cart
-          </Button>
         </PriceRow>
       </ProductInfoBox>
     </ProductWrapper>

@@ -69,9 +69,14 @@ const CityHolder = styled.div`
   gap: 5px;
 `;
 
+const BoxImg = styled.div`
+  width: 150px
+`;
+
 export default function CartPage({ product }) {
   const { cartProducts, addProduct, removeProduct, clearCart } = useContext(CartContext);
   const [products, setProducts] = useState([]);
+  const [localCartProducts, setLocalCartProducts] = useState([]);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
@@ -79,6 +84,10 @@ export default function CartPage({ product }) {
   const router = useRouter();
   const [selectedOptions, setSelectedOptions] = useState({});
   const { selectedOptions: selectedOptionsFromQuery } = router.query;
+  const { existingImages: existingProductImages, newImages: newProductImages } = router.query;
+  const existingImages = existingProductImages ? JSON.parse(existingProductImages) : [];
+  const newImages = newProductImages ? JSON.parse(newProductImages) : [];
+
 
   useEffect(() => {
     // Parse and update selectedOptions state when the component mounts
@@ -87,6 +96,7 @@ export default function CartPage({ product }) {
       setSelectedOptions(parsedOptions);
     }
   }, [selectedOptionsFromQuery]);
+
 
   products.map(product => {
     // Check if product is not null or undefined before accessing _id
@@ -101,28 +111,6 @@ export default function CartPage({ product }) {
       console.warn("Invalid product:", product);
     }
   });
-
-  const handleButtonClick = (optionIndex, individualOption) => {
-    const newSelectedOptions = { ...selectedOptions };
-    if (!newSelectedOptions[product._id]) {
-      newSelectedOptions[product._id] = {};
-    }
-    newSelectedOptions[product._id][optionIndex] = individualOption;
-    setSelectedOptions(newSelectedOptions);
-
-    // Update localStorage only if running in the browser
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('selectedOptions', JSON.stringify(newSelectedOptions));
-    }
-  };
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const storedOptions = localStorage.getItem('selectedOptions');
-      console.log('Stored Options (Initial):', storedOptions);
-      setSelectedOptions(storedOptions ? JSON.parse(storedOptions) : {});
-    }
-  }, []);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -148,14 +136,13 @@ export default function CartPage({ product }) {
     if (typeof window === 'undefined') {
       return;
     }
-    if (window?.location.href.includes('success')) {
+    if (window?.location.href.includes('success') && !isSuccess) {
       setIsSuccess(true);
-      clearCart();
     }
-  }, []);
+  }, [isSuccess]);
 
   function moreOfThisProduct(id) {
-    addProduct(id);
+    addProduct(id); // Call the addProduct function when the user wants more of this product
   }
 
   function lessOfThisProduct(id) {
@@ -167,13 +154,10 @@ export default function CartPage({ product }) {
       name, email, phone, cartProducts,
     });
 
-    if (response.data.url) {
-      // Use router.push to navigate to the payment page
-      router.push(response.data.url);
-    }
+    return response
   }
 
-  
+
   let total = 0;
 
   cartProducts.forEach(cartItem => {
@@ -219,6 +203,7 @@ export default function CartPage({ product }) {
                     <th>Product</th>
                     <th>Options</th>
                     <th>Quantity</th>
+                    <th>Image</th>
                     <th>Price</th>
                   </tr>
                 </thead>
@@ -239,20 +224,40 @@ export default function CartPage({ product }) {
                         </ProductInfoCell>
                         <td>
                           {Object.entries(cartItem.options).map(([optionKey, optionValue]) => (
-                            <div key={optionKey}>{`${optionValue[0]}`}</div>
+                            <div key={optionKey}>
+                              {Array.isArray(optionValue)
+                                ? optionValue.map((value, index) => (
+                                  <div key={index}>{Object.values(value).join(' ')}</div>
+                                ))
+                                : <div>{Object.values(optionValue).join(' ')}</div>
+                              }
+                            </div>
                           ))}
                         </td>
+
+
                         <td>
-                          <Button onClick={() => removeProduct(cartItem.productId, cartItem.options)}>-</Button>
+                          <Button onClick={() => removeProduct(optionsIdentifier, imagesIdentifier, quantity)}>-</Button>
                           <QuantityLabel>{cartItem.quantity}</QuantityLabel>
-                          <Button onClick={() => addProduct(cartItem.productId, cartItem.options)}>+</Button>
+                          <Button onClick={() => addProduct(optionsIdentifier, imagesIdentifier, quantity)}>+</Button>
+                        </td>
+                        <td>
+                          <BoxImg>
+                            {newImages.map((newImage, index) => (
+                              <div key={index}>
+                                <ProductImageBox>
+                                  <img src={newImage} alt={`New Image ${index + 1}`} />
+                                </ProductImageBox>
+                              </div>
+                            ))}
+                          </BoxImg>
                         </td>
                         <td>${cartItem.quantity * productDetails.price}</td>
                       </tr>
                     );
                   })}
                   <tr>
-                    <td colSpan={3}>Total</td>
+                    <td colSpan={4}>Total</td>
                     <td>${total}</td>
                   </tr>
                 </tbody>
