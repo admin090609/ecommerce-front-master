@@ -237,16 +237,16 @@ export default function CartPage({ product }) {
 
 
                         <td>
-                          <Button onClick={() => removeProduct(optionsIdentifier, imagesIdentifier, quantity)}>-</Button>
+                          <Button onClick={() => removeProduct(cartItem.productId, cartItem.options)}>-</Button>
                           <QuantityLabel>{cartItem.quantity}</QuantityLabel>
-                          <Button onClick={() => addProduct(optionsIdentifier, imagesIdentifier, quantity)}>+</Button>
+                          <Button onClick={() => addProduct(cartItem.productId, cartItem.options)}>+</Button>
                         </td>
                         <td>
                           <BoxImg>
-                            {newImages.map((newImage, index) => (
+                            {newImages.map((newImages, index) => (
                               <div key={index}>
                                 <ProductImageBox>
-                                  <img src={newImage} alt={`New Image ${index + 1}`} />
+                                  <img src={newImages} alt={`New Image ${index + 1}`} />
                                 </ProductImageBox>
                               </div>
                             ))}

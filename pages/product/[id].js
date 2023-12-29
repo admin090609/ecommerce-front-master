@@ -136,10 +136,18 @@ export default function ProductPage({ product, _id, title: existingTitle, descri
 
 
   const addToCart = () => {
-    // Check for errors first
-    if (!selectedOptions || Object.keys(selectedOptions).length === 0) {
-      // Show an error pop-up
-      setErrorMessage('Options must be chosen.');
+    const unchosenOptions = [];
+
+    // Check each option individually
+    product.options?.forEach((option, optionIndex) => {
+      if (!selectedOptions[product._id]?.[optionIndex]) {
+        unchosenOptions.push(option.title);
+      }
+    });
+
+    if (unchosenOptions.length > 0) {
+      // Show an error pop-up with the list of unchosen options
+      setErrorMessage(`Please choose options for: ${unchosenOptions.join(', ')}`);
       return;
     }
 

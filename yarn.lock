@@ -3653,7 +3653,7 @@ socks@^2.7.1:
     ip "^2.0.0"
     smart-buffer "^4.2.0"
 
-sortablejs@1:
+sortablejs@^1.15.1, sortablejs@1:
   version "1.15.1"
   resolved "https://registry.npmjs.org/sortablejs/-/sortablejs-1.15.1.tgz"
   integrity sha512-P5Cjvb0UG1ZVNiDPj/n4V+DinttXG6K8n7vM/HQf0C25K3YKQTQY6fsr/sEGsJGpQ9exmPxluHxKBc0mLKU1lQ==
