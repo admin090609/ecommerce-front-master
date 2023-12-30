@@ -73,7 +73,7 @@ const BoxImg = styled.div`
   width: 150px
 `;
 
-export default function CartPage({ product }) {
+export default function CartPage() {
   const { cartProducts, addProduct, removeProduct, clearCart } = useContext(CartContext);
   const [products, setProducts] = useState([]);
   const [localCartProducts, setLocalCartProducts] = useState([]);
@@ -98,38 +98,34 @@ export default function CartPage({ product }) {
   }, [selectedOptionsFromQuery]);
 
 
-  products.map(product => {
-    // Check if product is not null or undefined before accessing _id
-    if (product && product._id) {
-      const productId = product._id; // Access the product ID
 
-      // Now you can use the productId dynamically, for example, to access selectedOptions
-      const selectedOption = selectedOptions[productId];
-      // Use the selectedOption in your logic
-      const optionValue = selectedOption?.[0]; // Accessing the value of the property with key '0'
-    } else {
-      console.warn("Invalid product:", product);
-    }
-  });
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         // Get unique product IDs from cartProducts
         const uniqueProductIds = [...new Set(cartProducts.map(item => item.productId))];
+
         if (uniqueProductIds.length > 0) {
+          // Make a POST request to the server endpoint '/api/cart' with unique product IDs
           const response = await axios.post('/api/cart', { ids: uniqueProductIds });
+
+          // Update the state with the fetched product data
           setProducts(response.data);
         } else {
+          // If no unique product IDs are present, setProducts to an empty array
           setProducts([]);
         }
       } catch (error) {
+        // Handle errors if any occur during the fetch
         console.error('Error fetching products:', error);
       }
     };
 
+    // Call the fetchProducts function when the cartProducts array changes
     fetchProducts();
   }, [cartProducts]);
+
 
 
   useEffect(() => {
@@ -149,14 +145,6 @@ export default function CartPage({ product }) {
     removeProduct(id);
   }
 
-  async function goToPayment() {
-    const response = await axios.post('/api/checkout', {
-      name, email, phone, cartProducts,
-    });
-
-    return response
-  }
-
 
   let total = 0;
 
@@ -168,6 +156,26 @@ export default function CartPage({ product }) {
   });
 
 
+  async function goToPayment() {
+    try {
+      console.log(name, email, phone, cartProducts);
+      const formattedCartProducts = cartProducts.map(productId => ({ productId }));
+
+      const response = await axios.post('/api/checkout', { name, email, phone, cartProducts: formattedCartProducts });
+
+      // Check the response and perform any necessary actions
+      console.log('Payment response:', response);
+      return response;
+      // Redirect the user or handle success accordingly
+      // For example, you might redirect to a success page:
+    } catch (error) {
+      console.error('Error in /api/checkout:', error);
+
+      // Handle the error locally, you might show an error message to the user
+      // You can update the state to show an error message in the UI, for example
+      // setErrorState(true);
+    }
+  }
 
   if (isSuccess) {
     return (
@@ -271,17 +279,17 @@ export default function CartPage({ product }) {
                 placeholder="Name"
                 value={name}
                 name="name"
-                onChange={ev => setName(ev.target.value)} />
+                onChange={(ev) => setName(ev.target.value)} />
               <Input type="text"
                 placeholder="Email"
                 value={email}
                 name="email"
-                onChange={ev => setEmail(ev.target.value)} />
+                onChange={(ev) => setEmail(ev.target.value)} />
               <Input type="text"
                 placeholder="Number"
                 value={phone}
                 name="number"
-                onChange={ev => setPhone(ev.target.value)} />
+                onChange={(ev) => setPhone(ev.target.value)} />
               <Button black block
                 onClick={goToPayment}>
                 Continue to payment

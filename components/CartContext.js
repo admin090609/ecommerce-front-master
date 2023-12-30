@@ -61,7 +61,7 @@ export function CartContextProvider({ children, initialCartData }) {
       const newCartItem = {
         productId,
         options: selectedOptions,
-        productDetails: product,
+        productDetails: product.productDetails,
         images,
         quantity: 1,
       };
