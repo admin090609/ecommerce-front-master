@@ -15,6 +15,7 @@ import { useRouter } from "next/router";
 import { ReactSortable } from "react-sortablejs";
 import Spinner from "@/components/Spinner";
 import axios from "axios";
+import mongoose from "mongoose";
 
 const ColWrapper = styled.div`
   display: grid;
@@ -98,7 +99,7 @@ const Input = styled.input`
 visibility: hidden
 `
 
-export default function ProductPage({ product, _id, title: existingTitle, description: existingDescription, price: existingPrice, images: existingImages, category: assignedCategory, properties: assignedProperties, options: assignedOptions, minWidth: assignedWidth, minHeight: assignedHeight }) {
+export default function ProductPage({ product, cartProducts, _id, title: existingTitle, description: existingDescription, images: existingImages, category: assignedCategory, properties: assignedProperties, options: assignedOptions, minWidth: assignedWidth, minHeight: assignedHeight }) {
   const router = useRouter();
   const { addProduct } = useContext(CartContext);
   const [errorMessage, setErrorMessage] = useState('');
@@ -158,9 +159,13 @@ export default function ProductPage({ product, _id, title: existingTitle, descri
     }
 
     addProduct(product._id, selectedOptions, product, newImages, images);
+    console.log(product._id, selectedOptions, product, newImages, images)
+
     router.push({
       pathname: '/cart',
       query: {
+        productId: JSON.stringify(product._id),
+        product: JSON.stringify(product),
         selectedOptions: JSON.stringify(selectedOptions),
         newImages: JSON.stringify(newImages),
         images: JSON.stringify(images)
@@ -342,9 +347,6 @@ export default function ProductPage({ product, _id, title: existingTitle, descri
 
             <PriceRow>
               <div>
-                <Price>${product.price}</Price>
-              </div>
-              <div>
                 <Button primary onClick={addToCart}>
                   <CartIcon /> Add to cart
                 </Button>
@@ -361,16 +363,24 @@ export default function ProductPage({ product, _id, title: existingTitle, descri
   );
 }
 
+
 export async function getServerSideProps(context) {
-  await mongooseConnect();
+  await mongoose.connect("mongodb+srv://two2tek:Pass2023@cluster0.deqdqov.mongodb.net/?retryWrites=true&w=majority", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
   const { id } = context.query;
-  const product = await Product.findById(id);
+  const product = await Product.findOne({ _id: new mongoose.Types.ObjectId(id) });
+  console.log("id", id);
+  console.log("product", product);
+
   return {
     props: {
-      product: JSON.parse(JSON.stringify(product)),
+      product: JSON.parse(JSON.stringify(product))
     },
   };
 }
+
 
 function getSelectedOptionsString(selectedOptions) {
   let resultString = "";

@@ -9,21 +9,10 @@ export function CartContextProvider({ children, initialCartData }) {
   const lsKey = 'cartProducts';
   const ls = typeof window !== 'undefined' ? window.localStorage : null;
 
-  useEffect(() => {
-    if (ls && ls.getItem(lsKey)) {
-      setCartProducts(JSON.parse(ls.getItem(lsKey)));
-    }
-  }, []);
-
-  useEffect(() => {
-    if (cartProducts?.length >= 0) {
-      ls?.setItem(lsKey, JSON.stringify(cartProducts));
-    }
-  }, [cartProducts]);
 
   useEffect(() => {
     if (ls && ls.getItem(lsKey)) {
-      setCartProducts(JSON.parse(ls.getItem(lsKey)) || []);
+      setCartProducts(JSON.parse(ls.getItem(lsKey)) || []); // Update the state with local storage data
     }
   }, []);
 
@@ -61,7 +50,7 @@ export function CartContextProvider({ children, initialCartData }) {
       const newCartItem = {
         productId,
         options: selectedOptions,
-        productDetails: product.productDetails,
+        productDetails: product,
         images,
         quantity: 1,
       };
@@ -75,26 +64,28 @@ export function CartContextProvider({ children, initialCartData }) {
     }
   }
 
-
   function removeProduct(productId, selectedOptions) {
-    setCartProducts(prev => {
-      // Find the index of the item in the cart
-      const index = prev.findIndex(item =>
-        item.productId === productId && JSON.stringify(item.options) === JSON.stringify(selectedOptions)
+    setCartProducts((prev) => {
+      const updatedCart = [...prev];
+      const index = updatedCart.findIndex(
+        (item) =>
+          item.productId === productId &&
+          isEqual(item.options, selectedOptions)
       );
 
       if (index !== -1) {
-        // If the item is found in the cart
-        const updatedCart = [...prev];
         const item = updatedCart[index];
 
         // Decrease the quantity
-        item.quantity = (item.quantity || 1) - 1;
+        item.quantity = Math.max(0, item.quantity - 1);
 
         // Remove the item if the quantity becomes 0
-        if (item.quantity <= 0) {
+        if (item.quantity === 0) {
           updatedCart.splice(index, 1);
         }
+
+        // Update local storage
+        ls?.setItem(lsKey, JSON.stringify(updatedCart));
 
         return updatedCart;
       }
@@ -102,15 +93,15 @@ export function CartContextProvider({ children, initialCartData }) {
       return prev;
     });
 
-    setCartSelectedOptions(prev => {
+    setCartSelectedOptions((prev) => {
       const updatedOptions = { ...prev };
       const currentQuantity = updatedOptions[productId] || 1;
 
       // Decrease the quantity
-      updatedOptions[productId] = currentQuantity - 1;
+      updatedOptions[productId] = Math.max(0, currentQuantity - 1);
 
       // Remove the options if the quantity becomes 0
-      if (updatedOptions[productId] <= 0) {
+      if (updatedOptions[productId] === 0) {
         delete updatedOptions[productId];
       }
 
@@ -118,9 +109,11 @@ export function CartContextProvider({ children, initialCartData }) {
     });
   }
 
+
   function clearCart() {
     console.log('Clearing Cart');
     setCartSelectedOptions({});
+    setCartProducts([])
   }
 
   return (

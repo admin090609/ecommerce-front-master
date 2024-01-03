@@ -10,6 +10,9 @@ import Input from "@/components/Input";
 import { mongooseConnect } from "@/lib/mongoose";
 import { Product } from "@/models/Product";
 import { useRouter } from 'next/router';
+import mongoose from "mongoose";
+
+const { ObjectId } = require('mongoose').Types;
 
 const ColumnsWrapper = styled.div`
   display: grid;
@@ -97,9 +100,6 @@ export default function CartPage() {
     }
   }, [selectedOptionsFromQuery]);
 
-
-
-
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -126,8 +126,6 @@ export default function CartPage() {
     fetchProducts();
   }, [cartProducts]);
 
-
-
   useEffect(() => {
     if (typeof window === 'undefined') {
       return;
@@ -137,35 +135,22 @@ export default function CartPage() {
     }
   }, [isSuccess]);
 
-  function moreOfThisProduct(id) {
-    addProduct(id); // Call the addProduct function when the user wants more of this product
-  }
-
-  function lessOfThisProduct(id) {
-    removeProduct(id);
-  }
-
-
-  let total = 0;
-
-  cartProducts.forEach(cartItem => {
-    const productDetails = products.find(p => p._id === cartItem.productId);
-    if (productDetails) {
-      total += cartItem.quantity * productDetails.price; // Assuming cartItem has a 'quantity' property
-    }
-  });
 
 
   async function goToPayment() {
     try {
       console.log(name, email, phone, cartProducts);
       const formattedCartProducts = cartProducts.map(productId => ({ productId }));
+      console.log(formattedCartProducts);
 
       const response = await axios.post('/api/checkout', { name, email, phone, cartProducts: formattedCartProducts });
 
       // Check the response and perform any necessary actions
       console.log('Payment response:', response);
+      clearCart();
+      setIsSuccess(true);
       return response;
+
       // Redirect the user or handle success accordingly
       // For example, you might redirect to a success page:
     } catch (error) {
@@ -177,6 +162,7 @@ export default function CartPage() {
     }
   }
 
+
   if (isSuccess) {
     return (
       <>
@@ -186,12 +172,17 @@ export default function CartPage() {
             <Box>
               <h1>Thanks for your order!</h1>
               <p>We will email you when your order will be sent.</p>
+              <Button onClick={() => router.push('/')} /* Adjust the route as needed */>
+                Back to Home
+              </Button>
             </Box>
           </ColumnsWrapper>
         </Center>
       </>
     );
   }
+
+  console.log(cartProducts)
 
 
 
@@ -204,7 +195,7 @@ export default function CartPage() {
             <h2>Cart</h2>
             {!cartProducts.length && <div>Your cart is empty</div>}
 
-            {products?.length > 0 && (
+            {cartProducts?.length > 0 && (
               <Table>
                 <thead>
                   <tr>
@@ -212,14 +203,12 @@ export default function CartPage() {
                     <th>Options</th>
                     <th>Quantity</th>
                     <th>Image</th>
-                    <th>Price</th>
                   </tr>
                 </thead>
                 <tbody>
                   {cartProducts.map((cartItem, index) => {
-                    const productDetails = products.find(p => p._id === cartItem.productId);
-                    if (!productDetails) return null;
-
+                    console.log("cartItem:", cartItem)
+                    const productDetails = cartItem.productDetails;
                     return (
                       <tr key={index}>
                         <ProductInfoCell>
@@ -251,22 +240,21 @@ export default function CartPage() {
                         </td>
                         <td>
                           <BoxImg>
-                            {newImages.map((newImages, index) => (
+                            {cartItem.images.map((image, index) => (
                               <div key={index}>
                                 <ProductImageBox>
-                                  <img src={newImages} alt={`New Image ${index + 1}`} />
+                                  <img src={image} alt={`Product Image ${index + 1}`} />
                                 </ProductImageBox>
                               </div>
                             ))}
                           </BoxImg>
                         </td>
-                        <td>${cartItem.quantity * productDetails.price}</td>
+                        <td></td>
                       </tr>
                     );
                   })}
                   <tr>
                     <td colSpan={4}>Total</td>
-                    <td>${total}</td>
                   </tr>
                 </tbody>
               </Table>
@@ -303,11 +291,18 @@ export default function CartPage() {
 }
 
 export async function getServerSideProps(context) {
-  await mongooseConnect();
-  const { id } = context.query;
-  const product = await Product.findById(id);
+  await mongoose.connect("mongodb+srv://two2tek:Pass2023@cluster0.deqdqov.mongodb.net/?retryWrites=true&w=majority", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
 
-  // Use context.req.cookies.cartProducts directly
+  const id = context.params;
+  const objectId = new ObjectId(id);
+  const product = await Product.findOne({ _id: objectId });
+
+  console.log("id from context:", id);
+  console.log("product", product);
+
   const cartProducts = context.req.cookies.cartProducts || [];
 
   return {
@@ -316,4 +311,4 @@ export async function getServerSideProps(context) {
       cartProducts: cartProducts,
     },
   };
-}
+} 

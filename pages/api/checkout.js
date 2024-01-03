@@ -15,8 +15,10 @@ export default async function handler(req, res) {
   // Extract productIds as strings
   const productIds = cartProducts.map(item => item.productId.productId);
 
+
   // Fetch product information based on product IDs
   const productsInfos = await Product.find({ _id: { $in: productIds } });
+
 
   // Build line items for the order
   let line_items = [];
@@ -40,9 +42,9 @@ export default async function handler(req, res) {
       price_data: {
         currency: 'Lei',
         product_data: {
-          name: productInfo.title,
+          name: cartProduct.productId.productDetails.title,
           images: cartProduct.productId.images,
-          options:  cartProduct.productId.options,
+          options: cartProduct.productId.options,
         },
       },
     });
