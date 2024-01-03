@@ -14,7 +14,7 @@ export function CartContextProvider({ children, initialCartData }) {
     if (ls && ls.getItem(lsKey)) {
       setCartProducts(JSON.parse(ls.getItem(lsKey)) || []); // Update the state with local storage data
     }
-  }, []);
+  }, [ls, lsKey]);
 
   function addProduct(productId, selectedOptions, product, newImages, images) {
     // Check if selectedOptions is empty
@@ -114,6 +114,7 @@ export function CartContextProvider({ children, initialCartData }) {
     console.log('Clearing Cart');
     setCartSelectedOptions({});
     setCartProducts([])
+    ls?.removeItem(lsKey)
   }
 
   return (

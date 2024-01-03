@@ -44,11 +44,14 @@ export default async function handler(req, res) {
         product_data: {
           name: cartProduct.productId.productDetails.title,
           images: cartProduct.productId.images,
-          options: cartProduct.productId.options,
+          options: cartProduct.productId.options[productId],
         },
       },
     });
-  }
+
+    }
+
+
 
   const orderDoc = await Order.create({
     line_items,
