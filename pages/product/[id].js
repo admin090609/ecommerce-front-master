@@ -1,19 +1,18 @@
-import Center from "@/components/Center";
-import Header from "@/components/Header";
-import Title from "@/components/Title";
-import { mongooseConnect } from "@/lib/mongoose";
-import { Product } from "@/models/Product";
+import Center from "../../components/Center";
+import Title from "../../components/Title";
+import { mongooseConnect } from "../../lib/mongoose";
+import { Product } from "../../models/Product";
 import styled from "styled-components";
-import WhiteBox from "@/components/WhiteBox";
-import ProductImages from "@/components/ProductImages";
-import Button from "@/components/Button";
-import CartIcon from "@/components/icons/CartIcon";
+import WhiteBox from "../../components/WhiteBox";
+import ProductImages from "../../components/ProductImages";
+import Button from "../../components/Button";
+import CartIcon from "../../components/icons/CartIcon";
 import { useContext } from "react";
-import { CartContext } from "@/components/CartContext";
+import { CartContext } from "../../components/CartContext";
 import { useState, useEffect } from 'react';
 import { useRouter } from "next/router";
 import { ReactSortable } from "react-sortablejs";
-import Spinner from "@/components/Spinner";
+import Spinner from "../../components/Spinner";
 import axios from "axios";
 import mongoose from "mongoose";
 
@@ -26,31 +25,6 @@ const ColWrapper = styled.div`
   gap: 40px;
   margin: 40px 0;
 `;
-const PriceRow = styled.div`
-  display: flex;
-  gap: 20px;
-  align-items: center;
-`;
-const Price = styled.span`
-  font-size: 1.4rem;
-`;
-
-const OptionButton = styled.button`
-  border-width: 1px;
-  margin-right: 0.75rem;
-  padding: 0.5rem;
-  border-color: ${props => (props.isActive ? '#1a365d' : '#3b82f6')};
-  background-color: ${props => (props.isActive ? '#a0aec0' : '#f8fafc')};
-  transition-duration: 150ms;
-  transition-timing-function: ease-in-out;
-  border-radius: 0.5rem;
-  margin-bottom: 5rem;
-
-  &:hover {
-    border-color: #1e4bb5;
-    background-color: #cbd5e1;
-  }
-};`
 
 
 
@@ -79,16 +53,13 @@ const CloseButton = styled.button`
 `;
 
 const Upload = styled.div`
-justify-content: center;
 align-items: center;
-border: 2px gray solid;
 text-align: center;
 border-radius: 8px;
 width: 10vh;
 height: 10vh;
 font-size: 12px;
 line-height: 10px
-flex-direction: column;
     `;
 
 const Icon = styled.svg`
@@ -149,12 +120,6 @@ export default function ProductPage({ product, cartProducts, _id, title: existin
     if (unchosenOptions.length > 0) {
       // Show an error pop-up with the list of unchosen options
       setErrorMessage(`Please choose options for: ${unchosenOptions.join(', ')}`);
-      return;
-    }
-
-    if (!hasUploadedImages) { // Check if images have been uploaded
-      // Show an error pop-up
-      setErrorMessage('You must upload at least one image.');
       return;
     }
 
@@ -245,38 +210,96 @@ export default function ProductPage({ product, cartProducts, _id, title: existin
 
   return (
     <>
-      <Header />
-      <Center>
-        <ColWrapper>
+      {/* Titlu */}
+      <h1 className="text-center font-bold text-5xl mb-6">
+        {product.title}
+      </h1>
+      {/* Produs */}
+      <div className="flex justify-center max-w-screen-xl">
+        {/* Div Images + Descriere */}
+        <div>
+          {/* Images */}
           <WhiteBox>
             <ProductImages images={product.images} />
           </WhiteBox>
+          {/* Descriere */}
+          <div className="p-[30px] "><div className="text-xl font-semibold">Descriere:</div> {product.description}</div>
+        </div>
+        {/* Optiuni */}
+        <div>
+          {/* H1 */}
+          <h1 className="text-3xl flex font-semibold mb-1">
+            <div className="mr-2 w-10 h-10 rounded-[50%] bg-black px-3 text-white">
+              <span className="leading-10 ml-[2px]">
+                1
+              </span>
+            </div>
+            Alege opțiunile
+          </h1>
+          {/* Text - p */}
+          <p className=" mb-6 text-gray-500">
+            Pentru a afla costul, alegeți opțiunile care vă interesează.
+            La scurt timp după plasarea comenzii veți fi telefonați de către administație.
+          </p>
+          {/* Optiuni */}
           <div>
-            <Title>{product.title}</Title>
-            <p>{product.description}</p>
-
-            <div>
-              <label>
-                Imagini
-              </label>
-              <Upload>
-                <ReactSortable
-                  list={images}
-                  className="flex flex-wrap gap-1"
-                  setList={updateImagesOrder}
-                >
-                  {!!images?.length &&
-                    images.map((link, index) => (
-                      <div
-                        key={link}
-                        className="h-24 w-24 bg-white shadow-sm rounded-md border border-gray-200 overflow-hidden mr-4 flex"
-                        onMouseEnter={() => setHoveredImageIndex(index)}
-                        onMouseLeave={() => setHoveredImageIndex(null)}
-                      >
-                        <img src={link} alt="" className="rounded-lg w-24 h-24" />
+            {product.options?.map((option, optionIndex) => (
+              <div className="text-gray-500" key={optionIndex}>
+                {option.title}
+                <br />
+                <div className="flex ">
+                  {option.options?.map((individualOption, individualOptionIndex) => (
+                    <button
+                      className={`w-[100%] border-[1px] mr-3 p-2 hover:border-blue-500 hover:bg-slate-50  duration-150 ease-in-out rounded-lg mb-6 ${selectedOptions[product._id]?.[optionIndex] === individualOption ? "border-blue-500" : ""}`}
+                      key={individualOptionIndex}
+                      isActive={selectedOptions[product._id]?.[optionIndex] === individualOption}
+                      onClick={() => handleButtonClick(optionIndex, individualOption)}>
+                      {individualOption}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div >
+          {/* Images Upload */}
+          <div className="mb-4">
+            {/* H1 */}
+            <h1 className="text-3xl flex font-semibold mb-1">
+              <div className="mr-2 w-10 h-10 rounded-[50%] bg-black px-3 text-white">
+                <span className="leading-10">
+                  2
+                </span>
+              </div>
+              Adaugă imagini
+            </h1>
+            {/* Text - p */}
+            <p className="mb-2 text-gray-500">
+              Adaugă imagini doar dacă este specificat în descriere.
+            </p>
+            {/* Imagini titlu */}
+            <label className="text-gray-500">
+              Imagini
+            </label>
+            {/* Imagini logic */}
+            <Upload className="flex flex-row mt-2">
+              <ReactSortable
+                list={images}
+                className="flex flex-row"
+                setList={updateImagesOrder}
+              >
+                {!!images?.length &&
+                  images.map((link, index) => (
+                    <div
+                      key={link}
+                      className="w-24 h-24 bg-white shadow-sm rounded-md border-2 border-gray-200 mr-4 flex flex-row"
+                      onMouseEnter={() => setHoveredImageIndex(index)}
+                      onMouseLeave={() => setHoveredImageIndex(null)}
+                    >
+                      <img src={link} alt="" className="rounded-lg object-contain" />
+                      <div>
                         {hoveredImageIndex === index && (
                           <button
-                            className="absolute text-white p-[4px] mt-1 ml-1 text-sm z-20"
+                            className="bg-[#B1B1B1] w-4 h-4 absolute rounded-[50%] justify-center flex align-center leading-5 mt-[-5px] ml-[-10px] text-sm z-20"
                             onClick={() => {
                               const updatedImages = [...images];
                               updatedImages.splice(index, 1);
@@ -284,6 +307,7 @@ export default function ProductPage({ product, cartProducts, _id, title: existin
                             }}
                           >
                             <svg
+                              className="w-2 mt-[4px]"
                               xmlns="http://www.w3.org/2000/svg"
                               style={{ fill: '#ffff' }}
                               viewBox="0 0 24 24"
@@ -293,68 +317,72 @@ export default function ProductPage({ product, cartProducts, _id, title: existin
                           </button>
                         )}
                       </div>
-                    ))}
-                </ReactSortable>
-                {isUploading && (
-                  <div className="h-24 flex items-center">
-                    <Spinner />
-                  </div>
-                )}
-                <label className="w-24 h-24 cursor-pointer text-center flex flex-col items-center justify-center text-sm gap-1 text-primary rounded-md bg-white shadow-sm border border-primary">
-                  <Icon
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="w-6 h-6"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
-                    />
-                  </Icon>
-                  <div className="leading-4">Adaugă imagine</div>
-                  <Input type="file" onChange={uploadImages} />
-                </label>
-              </Upload>
-            </div>
-
-            <div>
-              {product.options?.map((option, optionIndex) => (
-                <div key={optionIndex}>
-                  {option.title}
-                  <br />
-                  {option.options?.map((individualOption, individualOptionIndex) => (
-                    <OptionButton
-                      key={individualOptionIndex}
-                      isActive={selectedOptions[product._id]?.[optionIndex] === individualOption}
-                      onClick={() => handleButtonClick(optionIndex, individualOption)}>
-                      {individualOption}
-                    </OptionButton>
+                    </div>
                   ))}
+              </ReactSortable>
+              {/* Loader */}
+              {isUploading && (
+                <div className="h-24 flex">
+                  <Spinner />
                 </div>
-              ))}
+              )}
+              {/* Image Uploader Input */}
+              <label className="w-24 h-24 cursor-pointer text-center flex flex-col items-center justify-center text-sm gap-1 text-primary rounded-md bg-white shadow-sm border border-primary">
+                <Icon
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-10 h-10 mt-4"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
+                  />
+                </Icon>
+                <div className="leading-4">Adaugă imagine</div>
+                <Input type="file" onChange={uploadImages} />
+              </label>
+            </Upload>
+          </div>
+          {/* Rezultat */}
+          <div className="flex justify-around items-center mt-10 mb-2 bg-gray-200 rounded-md p-2">
+            <div>
+              <h1 className="text-2xl text-[#6F6F6F] font-semibold px-3">
+                Rezultat:
+              </h1>
+              <p className="text-2xl text-black font-semibold px-3">
+                {product.title}
+              </p>
+            </div>
+            <div>
+              <h1 className="text-xl font-semibold">Opțiuni:</h1>
               <div>
                 {Object.keys(selectedOptions[product._id] || {}).length > 0 && (
                   <div>
-                    Selected Options: {getSelectedOptionsString(selectedOptions)}
+                    {getSelectedOptionsString(selectedOptions)}
                   </div>
                 )}
               </div>
             </div>
-
-            <PriceRow>
-              <div>
-                <Button primary onClick={addToCart}>
-                  <CartIcon /> Add to cart
-                </Button>
-              </div>
-            </PriceRow>
           </div>
-        </ColWrapper>
-      </Center>
+
+          <div>
+
+            <div>Selected Options:
+
+            </div>
+          </div>
+
+          <div>
+            <Button primary onClick={addToCart}>
+              <CartIcon /> Add to cart
+            </Button>
+          </div>
+        </div>
+      </div >
       <ErrorPopup visible={!!errorMessage}>
         <CloseButton onClick={() => setErrorMessage('')}>Close</CloseButton>
         {errorMessage}
@@ -387,7 +415,7 @@ function getSelectedOptionsString(selectedOptions) {
   for (const productId in selectedOptions) {
     const productOptions = selectedOptions[productId];
     for (const optionIndex in productOptions) {
-      resultString += `${productOptions[optionIndex]}, `;
+      resultString += `${productOptions[optionIndex]}`;
     }
     resultString = resultString.slice(0, -2);
     resultString += "; ";

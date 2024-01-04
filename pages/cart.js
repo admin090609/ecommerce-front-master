@@ -1,14 +1,13 @@
-import Header from "@/components/Header";
 import styled from "styled-components";
-import Center from "@/components/Center";
-import Button from "@/components/Button";
+import Center from "../components/Center";
+import Button from "../components/Button";
 import { useContext, useEffect, useState } from "react";
-import { CartContext } from "@/components/CartContext";
+import { CartContext } from "../components/CartContext";
 import axios from "axios";
-import Table from "@/components/Table";
-import Input from "@/components/Input";
-import { mongooseConnect } from "@/lib/mongoose";
-import { Product } from "@/models/Product";
+import Table from "../components/Table";
+import Input from "../components/Input";
+import { mongooseConnect } from "../lib/mongoose";
+import { Product } from "../models/Product";
 import { useRouter } from 'next/router';
 import mongoose from "mongoose";
 
@@ -166,7 +165,6 @@ export default function CartPage() {
   if (isSuccess) {
     return (
       <>
-        <Header />
         <Center>
           <ColumnsWrapper>
             <Box>
@@ -188,7 +186,6 @@ export default function CartPage() {
 
   return (
     <>
-      <Header />
       <Center>
         <ColumnsWrapper>
           <Box>
