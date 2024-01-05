@@ -29,6 +29,7 @@ const ImageButton = styled.div`
 const BigImageWrapper = styled.div`
   text-align: center;
   margin-left: 20px;
+  width: 75%;
 `;
 
 export default function ProductImages({ images }) {
@@ -47,8 +48,8 @@ export default function ProductImages({ images }) {
             </ImageButton>
           ))}
         </ImageButtons>
-        <BigImageWrapper className="border-2 rounded-lg overflow-hidden w-[70%]">
-          <BigImage src={activeImage} className="object-contain" />
+        <BigImageWrapper className="border-2 rounded-lg overflow-hidden">
+          <BigImage src={activeImage} className="object-contain " />
         </BigImageWrapper>
       </div>
     </>
