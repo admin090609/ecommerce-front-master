@@ -212,7 +212,7 @@ export default function ProductPage({ product, cartProducts, _id, title: existin
   return (
     <>
       {/* Titlu */}
-      <h1 className="text-center font-bold text-5xl mb-6">
+      <h1 className="text-center font-bold text-2xl md:text-5xl mb-6">
         {product.title}
       </h1>
       {/* Produs */}

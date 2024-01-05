@@ -47,7 +47,7 @@ export default function ProductImages({ images }) {
             </ImageButton>
           ))}
         </ImageButtons>
-        <BigImageWrapper className="border-2 rounded-lg overflow-hidden">
+        <BigImageWrapper className="border-2 rounded-lg overflow-hidden w-[70%]">
           <BigImage src={activeImage} className="object-contain" />
         </BigImageWrapper>
       </div>
