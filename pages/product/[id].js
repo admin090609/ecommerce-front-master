@@ -1,4 +1,5 @@
 import Center from "../../components/Center";
+import React from 'react';
 import Title from "../../components/Title";
 import { mongooseConnect } from "../../lib/mongoose";
 import { Product } from "../../models/Product";
@@ -44,7 +45,7 @@ const ErrorPopup = styled.div`
 
 const CloseButton = styled.button`
   position: absolute;
-  top: 10px;
+  top: 5px;
   right: 10px;
   background: none;
   border: none;
@@ -119,7 +120,7 @@ export default function ProductPage({ product, cartProducts, _id, title: existin
 
     if (unchosenOptions.length > 0) {
       // Show an error pop-up with the list of unchosen options
-      setErrorMessage(`Please choose options for: ${unchosenOptions.join(', ')}`);
+      setErrorMessage(`Vă rugăm să alegeți opțiunile pentru: ${unchosenOptions.join(', ')}.`);
       return;
     }
 
@@ -215,176 +216,189 @@ export default function ProductPage({ product, cartProducts, _id, title: existin
         {product.title}
       </h1>
       {/* Produs */}
-      <div className="flex justify-center max-w-screen-xl">
-        {/* Div Images + Descriere */}
-        <div>
-          {/* Images */}
-          <WhiteBox>
-            <ProductImages images={product.images} />
-          </WhiteBox>
-          {/* Descriere */}
-          <div className="p-[30px] "><div className="text-xl font-semibold">Descriere:</div> {product.description}</div>
-        </div>
-        {/* Optiuni */}
-        <div>
-          {/* H1 */}
-          <h1 className="text-3xl flex font-semibold mb-1">
-            <div className="mr-2 w-10 h-10 rounded-[50%] bg-black px-3 text-white">
-              <span className="leading-10 ml-[2px]">
-                1
-              </span>
-            </div>
-            Alege opțiunile
-          </h1>
-          {/* Text - p */}
-          <p className=" mb-6 text-gray-500">
-            Pentru a afla costul, alegeți opțiunile care vă interesează.
-            La scurt timp după plasarea comenzii veți fi telefonați de către administație.
-          </p>
-          {/* Optiuni */}
+      <div className="flex justify-center">
+        <div className="max-w-7xl md:flex block">
+          {/* Div Images + Descriere */}
           <div>
-            {product.options?.map((option, optionIndex) => (
-              <div className="text-gray-500" key={optionIndex}>
-                {option.title}
-                <br />
-                <div className="flex ">
-                  {option.options?.map((individualOption, individualOptionIndex) => (
-                    <button
-                      className={`w-[100%] border-[1px] mr-3 p-2 hover:border-blue-500 hover:bg-slate-50  duration-150 ease-in-out rounded-lg mb-6 ${selectedOptions[product._id]?.[optionIndex] === individualOption ? "border-blue-500" : ""}`}
-                      key={individualOptionIndex}
-                      isActive={selectedOptions[product._id]?.[optionIndex] === individualOption}
-                      onClick={() => handleButtonClick(optionIndex, individualOption)}>
-                      {individualOption}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div >
-          {/* Images Upload */}
-          <div className="mb-4">
+            {/* Images */}
+            <WhiteBox>
+              <ProductImages images={product.images} />
+            </WhiteBox>
+            {/* Descriere */}
+            <div className="p-[30px] "><div className="text-xl font-semibold">Descriere:</div> {product.description}</div>
+          </div>
+          {/* Optiuni */}
+          <div className="p-6">
             {/* H1 */}
             <h1 className="text-3xl flex font-semibold mb-1">
               <div className="mr-2 w-10 h-10 rounded-[50%] bg-black px-3 text-white">
-                <span className="leading-10">
-                  2
+                <span className="leading-10 ml-[2px]">
+                  1
                 </span>
               </div>
-              Adaugă imagini
+              Alege opțiunile
             </h1>
             {/* Text - p */}
-            <p className="mb-2 text-gray-500">
-              Adaugă imagini doar dacă este specificat în descriere.
+            <p className="mb-6 text-gray-500">
+              Pentru a afla costul, alegeți opțiunile care vă interesează.
+              La scurt timp după plasarea comenzii veți fi telefonați de către administație.
             </p>
-            {/* Imagini titlu */}
-            <label className="text-gray-500">
-              Imagini
-            </label>
-            {/* Imagini logic */}
-            <Upload className="flex flex-row mt-2">
-              <ReactSortable
-                list={images}
-                className="flex flex-row"
-                setList={updateImagesOrder}
-              >
-                {!!images?.length &&
-                  images.map((link, index) => (
-                    <div
-                      key={link}
-                      className="w-24 h-24 bg-white shadow-sm rounded-md border-2 border-gray-200 mr-4 flex flex-row"
-                      onMouseEnter={() => setHoveredImageIndex(index)}
-                      onMouseLeave={() => setHoveredImageIndex(null)}
-                    >
-                      <img src={link} alt="" className="rounded-lg object-contain" />
-                      <div>
-                        {hoveredImageIndex === index && (
-                          <button
-                            className="bg-[#B1B1B1] w-4 h-4 absolute rounded-[50%] justify-center flex align-center leading-5 mt-[-5px] ml-[-10px] text-sm z-20"
-                            onClick={() => {
-                              const updatedImages = [...images];
-                              updatedImages.splice(index, 1);
-                              setImages(updatedImages);
-                            }}
-                          >
-                            <svg
-                              className="w-2 mt-[4px]"
-                              xmlns="http://www.w3.org/2000/svg"
-                              style={{ fill: '#ffff' }}
-                              viewBox="0 0 24 24"
-                            >
-                              <path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z" />
-                            </svg>
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-              </ReactSortable>
-              {/* Loader */}
-              {isUploading && (
-                <div className="h-24 flex">
-                  <Spinner />
+            {/* Optiuni */}
+            <div>
+              {product.options?.map((option, optionIndex) => (
+                <div className="text-gray-500" key={optionIndex}>
+                  {option.title}
+                  <br />
+                  <div className="flex">
+                    {option.options?.map((individualOption, individualOptionIndex) => (
+                      <button
+                        className={`border-[1px] mr-3 p-2 hover:border-blue-500 hover:bg-slate-50  duration-150 ease-in-out rounded-lg mb-6 ${selectedOptions[product._id]?.[optionIndex] === individualOption ? "border-blue-500" : ""}`}
+                        key={individualOptionIndex}
+                        isActive={selectedOptions[product._id]?.[optionIndex] === individualOption}
+                        onClick={() => handleButtonClick(optionIndex, individualOption)}>
+                        {individualOption}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              )}
-              {/* Image Uploader Input */}
-              <label className="w-24 h-24 cursor-pointer text-center flex flex-col items-center justify-center text-sm gap-1 text-primary rounded-md bg-white shadow-sm border border-primary">
-                <Icon
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="w-10 h-10 mt-4"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
-                  />
-                </Icon>
-                <div className="leading-4">Adaugă imagine</div>
-                <Input type="file" onChange={uploadImages} />
-              </label>
-            </Upload>
-          </div>
-          {/* Rezultat */}
-          <div className="flex justify-around items-center mt-10 mb-2 bg-gray-200 rounded-md p-2">
-            <div>
-              <h1 className="text-2xl text-[#6F6F6F] font-semibold px-3">
-                Rezultat:
+              ))}
+            </div >
+            {/* Images Upload */}
+            <div className="mb-4">
+              {/* H1 */}
+              <h1 className="text-3xl flex font-semibold mb-1">
+                <div className="mr-2 w-10 h-10 rounded-[50%] bg-black px-3 text-white">
+                  <span className="leading-10">
+                    2
+                  </span>
+                </div>
+                Adaugă imagini
               </h1>
-              <p className="text-2xl text-black font-semibold px-3">
-                {product.title}
+              {/* Text - p */}
+              <p className="mb-6 text-gray-500">
+                Adaugă imagini doar dacă este specificat în descriere.
               </p>
-            </div>
-            <div>
-              <h1 className="text-xl font-semibold">Opțiuni:</h1>
-              <div>
-                {Object.keys(selectedOptions[product._id] || {}).length > 0 && (
-                  <div>
-                    {getSelectedOptionsString(selectedOptions)}
+              {/* Imagini titlu */}
+              <label className="text-gray-500">
+                Imagini
+              </label>
+              {/* Imagini logic */}
+              <Upload className="flex flex-row mt-2 items-center">
+                <ReactSortable
+                  list={images}
+                  className="flex flex-row"
+                  setList={updateImagesOrder}
+                >
+                  {!!images?.length &&
+                    images.map((link, index) => (
+                      <div
+                        key={link}
+                        className="w-24 h-24 bg-white shadow-sm rounded-md border-2 border-gray-200 mr-4 flex flex-row"
+                        onMouseEnter={() => setHoveredImageIndex(index)}
+                        onMouseLeave={() => setHoveredImageIndex(null)}
+                      >
+                        <img src={link} alt="" className="rounded-lg object-contain" />
+                        <div>
+                          {hoveredImageIndex === index && (
+                            <button
+                              className="bg-[#B1B1B1] w-4 h-4 absolute rounded-[50%] justify-center flex align-center leading-5 mt-[-5px] ml-[-10px] text-sm z-20"
+                              onClick={() => {
+                                const updatedImages = [...images];
+                                updatedImages.splice(index, 1);
+                                setImages(updatedImages);
+                              }}
+                            >
+                              <svg
+                                className="w-2 mt-[4px]"
+                                xmlns="http://www.w3.org/2000/svg"
+                                style={{ fill: '#ffff' }}
+                                viewBox="0 0 24 24"
+                              >
+                                <path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z" />
+                              </svg>
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                </ReactSortable>
+                {/* Loader */}
+                {isUploading && (
+                  <div className="h-24 flex items-center mr-4">
+                    <Spinner />
                   </div>
                 )}
+                {/* Image Uploader Input */}
+                <label className="w-24 h-24 cursor-pointer text-center flex flex-col items-center justify-center text-sm gap-1 text-primary rounded-md bg-white shadow-sm border border-primary">
+                  <Icon
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="w-10 h-10 mt-4"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
+                    />
+                  </Icon>
+                  <div className="leading-4">Adaugă imagine</div>
+                  <Input type="file" onChange={uploadImages} />
+                </label>
+              </Upload>
+            </div>
+            {/* Rezultat */}
+            <div className="flex justify-around items-center mt-10 mb-2 bg-gray-200 rounded-md p-2">
+              <div>
+                <h1 className="text-2xl text-[#6F6F6F] font-semibold">
+                  Rezultat:
+                </h1>
+                <p className="text-2xl text-black font-semibold">
+                  {product.title}
+                </p>
+              </div>
+              <div>
+                <h1 className="text-xl font-semibold">Opțiuni:</h1>
+                <div>
+                  {Object.keys(selectedOptions[product._id] || {}).length > 0 && (
+                    <div>
+                      {getSelectedOptionsString(selectedOptions).split('\n').map((line, index) => (
+                        <React.Fragment key={index}>
+                          {line}
+                          <br />
+                        </React.Fragment>
+                      ))}
+                    </div>
+                  )}
+
+                </div>
               </div>
             </div>
-          </div>
-
-          <div>
-
-            <div>Selected Options:
-
+            {/* Add to cart */}
+            <div className="flex justify-center duration-200 ease-in-out mb-20 text-white bg-[#453CF7] cursor-pointer hover:bg-[#3730b9] py-2 rounded-md">
+              <button primary onClick={addToCart} className="flex gap-2">
+                <CartIcon /> Adaugă la coș
+              </button>
             </div>
-          </div>
-
-          <div>
-            <Button primary onClick={addToCart}>
-              <CartIcon /> Add to cart
-            </Button>
           </div>
         </div>
       </div >
       <ErrorPopup visible={!!errorMessage}>
-        <CloseButton onClick={() => setErrorMessage('')}>Close</CloseButton>
+        <button
+          className="bg-black w-6 h-6 absolute rounded-[50%] justify-center flex align-center leading-5 top-[-10px] right-[-10px] text-sm z-20"
+          onClick={() => setErrorMessage('')}
+        >
+          <svg
+            className="w-3 h-6"
+            xmlns="http://www.w3.org/2000/svg"
+            style={{ fill: '#ffff' }}
+            viewBox="0 0 24 24"
+          >
+            <path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z" />
+          </svg>
+        </button>
         {errorMessage}
       </ErrorPopup>
     </>
@@ -414,12 +428,12 @@ function getSelectedOptionsString(selectedOptions) {
   let resultString = "";
   for (const productId in selectedOptions) {
     const productOptions = selectedOptions[productId];
-    for (const optionIndex in productOptions) {
-      resultString += `${productOptions[optionIndex]}`;
+    const optionsArray = Object.values(productOptions);
+
+    if (optionsArray.length > 0) {
+      resultString += optionsArray.join('\n') + '\n';
     }
-    resultString = resultString.slice(0, -2);
-    resultString += "; ";
   }
-  resultString = resultString.slice(0, -2);
-  return resultString;
+  return resultString.trim(); // Trim to remove any leading/trailing whitespace
 }
+
