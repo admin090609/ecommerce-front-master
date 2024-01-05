@@ -2,6 +2,7 @@ import styled, {css} from "styled-components";
 import {primary} from "../lib/colors";
 
 export const ButtonStyle = css`
+width: auto;
   border:0;
   padding: 5px 15px;
   border-radius: 5px;

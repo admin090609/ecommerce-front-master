@@ -24,35 +24,28 @@ const ColumnsWrapper = styled.div`
 `;
 
 const Box = styled.div`
-  background-color: #fff;
   border-radius: 10px;
   padding: 30px;
+  padding-top: 0px;
 `;
 
-const ProductInfoCell = styled.td`
-  padding: 10px 0;
-`;
 
 const ProductImageBox = styled.div`
-  width: 70px;
+  width: 100px;
   height: 100px;
-  padding: 2px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  display:flex;
+  display: flex;
   align-items: center;
-  justify-content: center;
-  border-radius: 10px;
   img{
-    max-width: 60px;
-    max-height: 60px;
+    max-width: 100px;
+    max-height: 100px;
   }
   @media screen and (min-width: 768px) {
     padding: 10px;
     width: 100px;
     height: 100px;
     img{
-      max-width: 80px;
-      max-height: 80px;
+      max-width: 120px;
+      max-height: 120px;
     }
   }
 `;
@@ -165,17 +158,14 @@ export default function CartPage() {
   if (isSuccess) {
     return (
       <>
-        <Center>
-          <ColumnsWrapper>
-            <Box>
-              <h1>Thanks for your order!</h1>
-              <p>We will email you when your order will be sent.</p>
-              <Button onClick={() => router.push('/')} /* Adjust the route as needed */>
-                Back to Home
-              </Button>
-            </Box>
-          </ColumnsWrapper>
-        </Center>
+        <div className="flex flex-col justify-center items-center">
+          <img src="/images/order.png" className="w-40 mb-4" />
+          <h1 className="text-xl">Vă mulțumim pentru comandă!</h1>
+          <p className="text-xl">Așteptați apelul din partea administrației.</p>
+          <Button className="bg-[#453CF7] text-white font-medium p-3 rounded-md mx-auto flex justify-center mt-4 hover:bg-[#3730b9]" onClick={() => router.push('/')} /* Adjust the route as needed */>
+            Continuă cumpărăturile
+          </Button>
+        </div>
       </>
     );
   }
@@ -187,102 +177,99 @@ export default function CartPage() {
   return (
     <>
       <Center>
-        <ColumnsWrapper>
-          <Box>
-            <h2>Cart</h2>
-            {!cartProducts.length && <div>Your cart is empty</div>}
-
-            {cartProducts?.length > 0 && (
-              <Table>
-                <thead>
-                  <tr>
-                    <th>Product</th>
-                    <th>Options</th>
-                    <th>Quantity</th>
-                    <th>Image</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {cartProducts.map((cartItem, index) => {
-                    console.log("cartItem:", cartItem)
-                    const productDetails = cartItem.productDetails;
-                    return (
-                      <tr key={index}>
-                        <ProductInfoCell>
-                          <ProductImageBox>
-                            <img src={productDetails.images[0]} alt={productDetails.title} />
-                          </ProductImageBox>
-                          <div>
-                            {productDetails.title}
-                          </div>
-                        </ProductInfoCell>
-                        <td>
+        <div className="flex flex-col justify-center items-center">
+          {!cartProducts.length &&
+            <div className="flex flex-col justify-center items-center">
+              <img src="/images/empty-cart.png" className="w-80" />
+              <div className="text-xl">Cartul dvs. este gol.</div>
+            </div>
+          }
+        </div>
+        <div className="flex md:flex-row flex-col">
+          {cartProducts?.length > 0 && (
+            <Table>
+              <div className="shadow-md mb-4 border border-[#f0f0f0] rounded-md md:w-[110%] p-4">
+                <h2 className="font-bold sm:text-start text-center text-2xl text-black ml-0 sm:ml-6">CARTUL DVS.</h2>
+              </div>
+              <div className="flex justify-center flex-col items-center md:w-[110%]">
+                {cartProducts.map((cartItem, index) => {
+                  const productDetails = cartItem.productDetails;
+                  return (
+                    <div key={index} className="flex md:flex-row flex-col justify-center items-center md:gap-10 gap-4 shadow-md mb-2 p-4 border border-[#f0f0f0] rounded-md w-full">
+                      <ProductImageBox>
+                        <img src={productDetails.images[0]} alt={productDetails.title} />
+                      </ProductImageBox>
+                      <div>
+                        <h1 className="text-[#6F6F6F] sm:text-xl text-sm ">
+                          {productDetails.title}
+                        </h1>
+                        <div>
                           {Object.entries(cartItem.options).map(([optionKey, optionValue]) => (
-                            <div key={optionKey}>
+                            <div key={optionKey} className="flex flex-col">
                               {Array.isArray(optionValue)
                                 ? optionValue.map((value, index) => (
-                                  <div key={index}>{Object.values(value).join(' ')}</div>
+                                  <div key={index} className="flex flex-col" style={{ whiteSpace: 'pre-line' }}>
+                                    {Object.values(value).join('\n')}
+                                  </div>
                                 ))
-                                : <div>{Object.values(optionValue).join(' ')}</div>
+                                : <div className="flex flex-col" style={{ whiteSpace: 'pre-line' }}>{Object.values(optionValue).join('\n')}</div>
                               }
                             </div>
                           ))}
-                        </td>
+                        </div>
+                      </div>
+                      <div className="gap-4 flex">
+                        <button className="bg-[#453CF7] hover:bg-[#3730b9] duration-200 ease-in-out text-white px-2 rounded-[50%] w-8 h-8 text-xl" onClick={() => removeProduct(cartItem.productId, cartItem.options)}>-</button>
+                        <QuantityLabel className="text-2xl">{cartItem.quantity}</QuantityLabel>
+                        <button className="bg-[#453CF7] hover:bg-[#3730b9] duration-200 ease-in-out text-white px-2 rounded-[50%] w-8 h-8 text-xl" onClick={() => addProduct(cartItem.productId, cartItem.options)}>+</button>
+                      </div>
+                      <div>
+                          {cartItem.images.map((image, index) => (
+                            <div key={index}>
+                              <ProductImageBox>
+                                <img src={image} alt={`Product Image ${index + 1}`} />
+                              </ProductImageBox>
+                            </div>
+                          ))}
+                      </div>
+                    </div>
 
-
-                        <td>
-                          <Button onClick={() => removeProduct(cartItem.productId, cartItem.options)}>-</Button>
-                          <QuantityLabel>{cartItem.quantity}</QuantityLabel>
-                          <Button onClick={() => addProduct(cartItem.productId, cartItem.options)}>+</Button>
-                        </td>
-                        <td>
-                          <BoxImg>
-                            {cartItem.images.map((image, index) => (
-                              <div key={index}>
-                                <ProductImageBox>
-                                  <img src={image} alt={`Product Image ${index + 1}`} />
-                                </ProductImageBox>
-                              </div>
-                            ))}
-                          </BoxImg>
-                        </td>
-                        <td></td>
-                      </tr>
-                    );
-                  })}
-                  <tr>
-                    <td colSpan={4}>Total</td>
-                  </tr>
-                </tbody>
-              </Table>
-            )}
-          </Box>
-          {!!cartProducts?.length && (
-            <Box>
-              <h2>Order information</h2>
-              <Input type="text"
-                placeholder="Name"
-                value={name}
-                name="name"
-                onChange={(ev) => setName(ev.target.value)} />
-              <Input type="text"
-                placeholder="Email"
-                value={email}
-                name="email"
-                onChange={(ev) => setEmail(ev.target.value)} />
-              <Input type="text"
-                placeholder="Number"
-                value={phone}
-                name="number"
-                onChange={(ev) => setPhone(ev.target.value)} />
-              <Button black block
-                onClick={goToPayment}>
-                Continue to payment
-              </Button>
-            </Box>
+                  );
+                })}
+              </div>
+            </Table>
           )}
-        </ColumnsWrapper>
-      </Center>
+          <div className="w-[80%]">
+            {!!cartProducts?.length && (
+              <Box>
+                <h2>Datele dvs.</h2>
+                <Input type="text"
+                  placeholder="Nume..."
+                  value={name}
+                  name="name"
+                  onChange={(ev) => setName(ev.target.value)} />
+                <Input type="text"
+                  placeholder="Email..."
+                  value={email}
+                  name="email"
+                  onChange={(ev) => setEmail(ev.target.value)} />
+                <Input type="text"
+                  placeholder="Nr. de telefon..."
+                  value={phone}
+                  name="number"
+                  onChange={(ev) => setPhone(ev.target.value)} />
+                <Button 
+                  onClick={goToPayment}
+                  className="flex justify-center duration-200 ease-in-out mb-20 text-white bg-[#453CF7] cursor-pointer hover:bg-[#3730b9] py-2 rounded-md"
+                >
+                  Comandă
+                </Button>
+              </Box>
+            )}
+          </div>
+        </div>
+
+      </Center >
     </>
   );
 }
