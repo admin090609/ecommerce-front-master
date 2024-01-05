@@ -4,9 +4,7 @@ import Image from "next/image";
 
 const product = () => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const [selectedImage, setSelectedImage] = useState<null | number>(null);
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const [selectedColor, setSelectedColor] = useState<number | null>(null); // Adăugăm o stare pentru culoare
 
   const handleImageClick = (index) => {
     setSelectedImage(index);
@@ -40,9 +38,8 @@ const product = () => {
               alt=""
               width={600}
               height={100}
-              className={`border-2 rounded-lg mb-3 hover:border-black hover:bg-slate-50 cursor-pointer duration-300 ease-in-out ${
-                selectedImage === index ? "border-black" : ""
-              }`}
+              className={`border-2 rounded-lg mb-3 hover:border-black hover:bg-slate-50 cursor-pointer duration-300 ease-in-out ${selectedImage === index ? "border-black" : ""
+                }`}
               onClick={() => handleImageClick(index)}
             />
           ))}
@@ -69,9 +66,8 @@ const product = () => {
               {colors.map((color, index) => (
                 <button
                   key={index}
-                  className={`border-[1px] mr-3 p-2 hover:border-blue-500 hover:bg-slate-50  duration-150 ease-in-out rounded-lg mb-20 ${
-                    selectedColor === index ? "border-blue-500" : ""
-                  }`}
+                  className={`border-[1px] mr-3 p-2 hover:border-blue-500 hover:bg-slate-50  duration-150 ease-in-out rounded-lg mb-20 ${selectedColor === index ? "border-blue-500" : ""
+                    }`}
                   onClick={() => handleColorClick(index)}
                 >
                   <Image src={color} alt="" width={100} height={100} />
