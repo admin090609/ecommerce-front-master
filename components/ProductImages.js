@@ -13,6 +13,7 @@ const ImageButtons = styled.div`
     display: flex;
     flex-direction: column;
     gap: 10px;
+    width: 25%;
   `;
 const ImageButton = styled.div`
     border: 2px solid #ccc;
