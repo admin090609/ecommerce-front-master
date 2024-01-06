@@ -139,7 +139,7 @@ export default function CartPage() {
             </div>
           }
         </div>
-            <div className="flex md:flex-row flex-col max-w-screen-2xl gap-8 md:p-10 p-2 justify-center md:items-start items-center">
+        <div className="flex md:flex-row flex-col max-w-full gap-8 md:p-10 p-2 justify-center md:items-start items-center">
           {cartProducts?.length > 0 && (
             <Table className="flex flex-col justify-center items-center">
               <div className="shadow-md mb-4 border border-[#cccc] rounded-md md:w-[100%] w-[170%] p-4">

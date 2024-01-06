@@ -65,6 +65,19 @@ const Input = styled.input`
 visibility: hidden
 `
 
+const getInitialSelectedOptions = () => {
+  try {
+    if (typeof window !== 'undefined') {
+      const storedOptions = localStorage.getItem('selectedOptions');
+      console.log('Stored Options (Initial):', storedOptions);
+      return storedOptions ? JSON.parse(storedOptions) : {};
+    }
+  } catch (error) {
+    console.error('Error accessing localStorage:', error);
+  }
+  return {};
+};
+
 export default function ProductPage({ product, cartProducts, _id, title: existingTitle, description: existingDescription, images: existingImages, category: assignedCategory, properties: assignedProperties, options: assignedOptions, minWidth: assignedWidth, minHeight: assignedHeight }) {
   const router = useRouter();
   const { addProduct } = useContext(CartContext);
@@ -74,18 +87,7 @@ export default function ProductPage({ product, cartProducts, _id, title: existin
   const [isUploading, setIsUploading] = useState(false);
   const [hoveredImageIndex, setHoveredImageIndex] = useState(null);
   const [newImages, setNewImages] = useState([]);
-
-
-  const [selectedOptions, setSelectedOptions] = useState(() => {
-    try {
-      const storedOptions = localStorage.getItem('selectedOptions');
-      console.log('Stored Options (Initial):', storedOptions);
-      return storedOptions ? JSON.parse(storedOptions) : {};
-    } catch (error) {
-      console.error('Error accessing localStorage:', error);
-      return {};
-    }
-  });
+  const [selectedOptions, setSelectedOptions] = useState(getInitialSelectedOptions);
 
   const handleButtonClick = (optionIndex, individualOption) => {
     const newSelectedOptions = { ...selectedOptions };
@@ -103,24 +105,38 @@ export default function ProductPage({ product, cartProducts, _id, title: existin
 
 
   const addToCart = () => {
-    const unchosenOptions = [];
+    // Check if the product has options
+    if (!product.options || product.options.length === 0) {
+      // If no options, directly add the product to the cart without checking selected options
+      addProduct(product._id, {}, product, newImages, images);
+      router.push({
+        pathname: '/cart',
+        query: {
+          productId: JSON.stringify(product._id),
+          product: JSON.stringify(product),
+          selectedOptions: JSON.stringify({}),
+          newImages: JSON.stringify(newImages),
+          images: JSON.stringify(images),
+        },
+      });
+      return;
+    }
 
-    // Check each option individually
+    // The rest of your code for handling products with options
+    const unchosenOptions = [];
     product.options?.forEach((option, optionIndex) => {
       if (!selectedOptions[product._id]?.[optionIndex]) {
         unchosenOptions.push(option.title);
       }
     });
 
-    if (unchosenOptions.length > 0) {
+    if (unchosenOptions.length > 4) {
       // Show an error pop-up with the list of unchosen options
       setErrorMessage(`Vă rugăm să alegeți opțiunile pentru: ${unchosenOptions.join(', ')}.`);
       return;
     }
 
     addProduct(product._id, selectedOptions, product, newImages, images);
-    console.log(product._id, selectedOptions, product, newImages, images)
-
     router.push({
       pathname: '/cart',
       query: {
@@ -128,10 +144,14 @@ export default function ProductPage({ product, cartProducts, _id, title: existin
         product: JSON.stringify(product),
         selectedOptions: JSON.stringify(selectedOptions),
         newImages: JSON.stringify(newImages),
-        images: JSON.stringify(images)
+        images: JSON.stringify(images),
       },
     });
   };
+
+
+
+
 
 
   useEffect(() => {
@@ -187,7 +207,7 @@ export default function ProductPage({ product, cartProducts, _id, title: existin
 
       if (invalidImages.length > 0) {
         // Display error message for invalid images
-        setErrorMessage('Resolutie nepotrivita');
+        setErrorMessage(`Rezoluție nepotrivită. Lățime: ${product.minWidth}px; Înălțime: ${product.minHeight}px`);
         setIsUploading(false);
         return;
       }
@@ -206,7 +226,7 @@ export default function ProductPage({ product, cartProducts, _id, title: existin
   return (
     <>
       {/* Titlu */}
-      <h1 className="text-center font-bold text-2xl md:text-5xl mb-6">
+      <h1 className="text-center font-bold text-4xl md:text-5xl md:mb-6 mb-0 mt-6 md:mt-0">
         {product.title}
       </h1>
       {/* Produs */}

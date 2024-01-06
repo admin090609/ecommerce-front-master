@@ -8,23 +8,26 @@ const sublimare_landyard = ({ products }) => {
     return (
         <div className=" flex flex-col items-center">
             <h1 className="text-3xl mb-8">Sublimare pe landyarduri</h1>
-            <div>
-                <ul>
+            <ul className="flex items-center gap-4">
+
                     {products.map((product) => (
                         <li key={product._id}>
                             <Link href={`/product/${product._id}`}>
+                            <div className="h-40 w-60 flex items-center justify-center border-2 border-[#ccc] rounded-md overflow-hidden">
+
                                 <img
                                     src={product.images?.[0]}
                                     alt={product.title}
-                                    width={200}
-                                    height={200}
+                                    className="object-contain w-full h-full"
+
                                 />
+            </div>
+
                                 <p>{product.title}</p>
                             </Link>
                         </li>
                     ))}
                 </ul>
-            </div>
         </div>
     );
 };

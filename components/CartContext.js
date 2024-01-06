@@ -18,11 +18,6 @@ export function CartContextProvider({ children, initialCartData }) {
 
   function addProduct(productId, selectedOptions, product, newImages, images) {
     // Check if selectedOptions is empty
-    if (!selectedOptions || Object.keys(selectedOptions).length === 0) {
-      // Show an error pop-up
-      setErrorMessage('Options must be chosen.');
-      return;
-    }
 
     console.log('Selected Options:', selectedOptions);
     console.log('Images:', images);

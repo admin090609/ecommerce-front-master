@@ -23,7 +23,7 @@ const carti_vizita = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-carti_vizita/carton_special">
                         <Image
-                            src="/images/tiparituri.jpg"
+                            src="/images/vizita1.jpg"
                             alt=""
                             width={100}
                             height={100}
