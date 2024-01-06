@@ -1,7 +1,6 @@
 import styled from "styled-components";
 
 const StyledInput = styled.input`
-  width: auto;
   display: flex;
   flex-direction: column;
   padding: 5px;
@@ -12,5 +11,5 @@ const StyledInput = styled.input`
 `;
 
 export default function Input(props) {
-  return <StyledInput {...props} />
+  return <StyledInput {...props} className="w-[130%]"/>
 }

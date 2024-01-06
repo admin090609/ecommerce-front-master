@@ -293,7 +293,7 @@ export default function ProductPage({ product, cartProducts, _id, title: existin
                     images.map((link, index) => (
                       <div
                         key={link}
-                        className="w-24 h-24 bg-white shadow-sm rounded-md border-2 border-gray-200 mr-4 flex flex-row"
+                        className="w-24 h-24 flex justify-center bg-white shadow-sm rounded-md border-2 border-gray-200 mr-4 flex flex-row"
                         onMouseEnter={() => setHoveredImageIndex(index)}
                         onMouseLeave={() => setHoveredImageIndex(null)}
                       >

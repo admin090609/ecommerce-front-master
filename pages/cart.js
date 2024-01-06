@@ -1,54 +1,15 @@
 import styled from "styled-components";
-import Center from "../components/Center";
 import Button from "../components/Button";
 import { useContext, useEffect, useState } from "react";
 import { CartContext } from "../components/CartContext";
 import axios from "axios";
 import Table from "../components/Table";
 import Input from "../components/Input";
-import { mongooseConnect } from "../lib/mongoose";
 import { Product } from "../models/Product";
 import { useRouter } from 'next/router';
 import mongoose from "mongoose";
 
 const { ObjectId } = require('mongoose').Types;
-
-const ColumnsWrapper = styled.div`
-  display: grid;
-  grid-template-columns: 1fr;
-  @media screen and (min-width: 768px) {
-    grid-template-columns: 1.2fr .8fr;
-  }
-  gap: 40px;
-  margin-top: 40px;
-`;
-
-const Box = styled.div`
-  border-radius: 10px;
-  padding: 30px;
-  padding-top: 0px;
-`;
-
-
-const ProductImageBox = styled.div`
-  width: 100px;
-  height: 100px;
-  display: flex;
-  align-items: center;
-  img{
-    max-width: 100px;
-    max-height: 100px;
-  }
-  @media screen and (min-width: 768px) {
-    padding: 10px;
-    width: 100px;
-    height: 100px;
-    img{
-      max-width: 120px;
-      max-height: 120px;
-    }
-  }
-`;
 
 const QuantityLabel = styled.span`
   padding: 0 15px;
@@ -59,14 +20,7 @@ const QuantityLabel = styled.span`
   }
 `;
 
-const CityHolder = styled.div`
-  display:flex;
-  gap: 5px;
-`;
 
-const BoxImg = styled.div`
-  width: 150px
-`;
 
 export default function CartPage() {
   const { cartProducts, addProduct, removeProduct, clearCart } = useContext(CartContext);
@@ -176,7 +130,7 @@ export default function CartPage() {
 
   return (
     <>
-      <Center>
+      <div className="flex justify-center">
         <div className="flex flex-col justify-center items-center">
           {!cartProducts.length &&
             <div className="flex flex-col justify-center items-center">
@@ -185,22 +139,22 @@ export default function CartPage() {
             </div>
           }
         </div>
-        <div className="flex md:flex-row flex-col">
+            <div className="flex md:flex-row flex-col max-w-screen-2xl gap-8 md:p-10 p-2 justify-center md:items-start items-center">
           {cartProducts?.length > 0 && (
-            <Table>
-              <div className="shadow-md mb-4 border border-[#f0f0f0] rounded-md md:w-[110%] p-4">
+            <Table className="flex flex-col justify-center items-center">
+              <div className="shadow-md mb-4 border border-[#cccc] rounded-md md:w-[100%] w-[170%] p-4">
                 <h2 className="font-bold sm:text-start text-center text-2xl text-black ml-0 sm:ml-6">CARTUL DVS.</h2>
               </div>
-              <div className="flex justify-center flex-col items-center md:w-[110%]">
+              <div className="flex justify-center flex-col items-center md:w-[100%]">
                 {cartProducts.map((cartItem, index) => {
                   const productDetails = cartItem.productDetails;
                   return (
-                    <div key={index} className="flex md:flex-row flex-col justify-center items-center md:gap-10 gap-4 shadow-md mb-2 p-4 border border-[#f0f0f0] rounded-md w-full">
-                      <ProductImageBox>
+                    <div key={index} className="flex md:flex-row flex-col justify-center items-center md:gap-8 gap-4 shadow-md md:mb-2 mb-6 p-6 border border-[#cccc] rounded-md w-[170%] md:w-full">
+                      <div className="w-40 border-[#ccc] border-2 rounded-md  overflow-hidden object-contain ">
                         <img src={productDetails.images[0]} alt={productDetails.title} />
-                      </ProductImageBox>
+                      </div>
                       <div>
-                        <h1 className="text-[#6F6F6F] sm:text-xl text-sm ">
+                        <h1 className="text-[#6F6F6F] sm:text-2xl text-sm ">
                           {productDetails.title}
                         </h1>
                         <div>
@@ -223,26 +177,23 @@ export default function CartPage() {
                         <QuantityLabel className="text-2xl">{cartItem.quantity}</QuantityLabel>
                         <button className="bg-[#453CF7] hover:bg-[#3730b9] duration-200 ease-in-out text-white px-2 rounded-[50%] w-8 h-8 text-xl" onClick={() => addProduct(cartItem.productId, cartItem.options)}>+</button>
                       </div>
-                      <div>
-                          {cartItem.images.map((image, index) => (
-                            <div key={index}>
-                              <ProductImageBox>
-                                <img src={image} alt={`Product Image ${index + 1}`} />
-                              </ProductImageBox>
-                            </div>
-                          ))}
+                      <div className="w-40 border-[#ccc] border-2 rounded-md  overflow-hidden object-contain ">
+                        {cartItem.images.map((image, index) => (
+                          <div key={index}>
+                            <img src={image} alt={`Product Image ${index + 1}`} />
+                          </div>
+                        ))}
                       </div>
                     </div>
-
                   );
                 })}
               </div>
             </Table>
           )}
-          <div className="w-[80%]">
+          <div className="md:w-[170%] w-[130%]">
             {!!cartProducts?.length && (
-              <Box>
-                <h2>Datele dvs.</h2>
+              <div className="flex flex-col md:items-start items-center justify-center">
+                <h2 className="text-xl">Datele dvs.</h2>
                 <Input type="text"
                   placeholder="Nume..."
                   value={name}
@@ -258,18 +209,17 @@ export default function CartPage() {
                   value={phone}
                   name="number"
                   onChange={(ev) => setPhone(ev.target.value)} />
-                <Button 
+                <Button
                   onClick={goToPayment}
-                  className="flex justify-center duration-200 ease-in-out mb-20 text-white bg-[#453CF7] cursor-pointer hover:bg-[#3730b9] py-2 rounded-md"
+                  className=" w-[130%] flex justify-center duration-200 ease-in-out mb-20 text-white bg-[#453CF7] cursor-pointer hover:bg-[#3730b9] py-2 rounded-md"
                 >
                   Comandă
                 </Button>
-              </Box>
+              </div>
             )}
           </div>
         </div>
-
-      </Center >
+      </div>
     </>
   );
 }
