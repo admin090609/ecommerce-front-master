@@ -332,7 +332,7 @@ export default function ProductPage({ product, cartProducts, _id, title: existin
                         viewBox="0 0 24 24"
                         strokeWidth={1.5}
                         stroke="currentColor"
-                        className="w-6 h-6" // Adjust the size as needed
+                        className="w-8 h-8" // Adjust the size as needed
                       >
                         <path
                           strokeLinecap="round"
