@@ -330,7 +330,7 @@ export default function ProductPage({ product, cartProducts, _id, title: existin
                 )}
                 {/* Image Uploader Input */}
                 <label className="w-24 h-24 cursor-pointer text-center flex flex-col items-center justify-center text-sm gap-1 text-primary rounded-md bg-white shadow-sm border border-primary">
-                  <div className="w-10 h-10 mt-3 flex justify-center">
+                  <div className="w-10 h-10 md:mt-3 mt-6 flex justify-center">
                     <Icon
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
