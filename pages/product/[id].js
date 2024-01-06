@@ -57,15 +57,9 @@ const Upload = styled.div`
 align-items: center;
 text-align: center;
 border-radius: 8px;
-width: 10vh;
-height: 10vh;
 font-size: 12px;
 line-height: 10px
     `;
-
-const Icon = styled.svg`
-width: 70%
-`
 
 const Input = styled.input`
 visibility: hidden
@@ -329,26 +323,30 @@ export default function ProductPage({ product, cartProducts, _id, title: existin
                   </div>
                 )}
                 {/* Image Uploader Input */}
-                <label className="w-24 h-24 cursor-pointer text-center flex flex-col items-center justify-center text-sm gap-1 text-primary rounded-md bg-white shadow-sm border border-primary">
-                  <div className="w-10 h-10 md:mt-3 mt-6 flex justify-center">
-                    <Icon
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
+                <div className="flex items-center justify-center">
+                  <label className="w-24 h-24 cursor-pointer text-center flex flex-col items-center justify-center text-sm gap-1 text-primary rounded-md bg-white shadow-sm border border-primary">
+                    <div className="w-8 h-8 flex justify-center items-center mt-3">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="w-7 h-7" // Adjust the size as needed
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
+                        />
+                      </svg>
+                    </div>
+                    <div className="leading-4 text-center">Adaugă imagine</div>
+                    <Input type="file" onChange={uploadImages} />
+                  </label>
+                </div>
 
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
-                      />
-                    </Icon>
-                  </div>
-                  <div className="leading-4">Adaugă imagine</div>
-                  <Input type="file" onChange={uploadImages} />
-                </label>
+
               </Upload>
             </div>
             {/* Rezultat */}
