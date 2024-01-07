@@ -10,7 +10,7 @@ const pos_materiale = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-pos/suportPlexiglas">
                         <Image
-                            src="/images/carti_de_vizita.jpg"
+                            src="/images/pos1.jpg"
                             alt=""
                             width={100}
                             height={100}
@@ -23,7 +23,7 @@ const pos_materiale = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-pos/suportPliante">
                         <Image
-                            src="/images/tiparituri.jpg"
+                            src="/images/pos2.jpg"
                             alt=""
                             width={100}
                             height={100}
@@ -36,7 +36,7 @@ const pos_materiale = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-pos/suportLemn">
                         <Image
-                            src="/images/carti_de_vizita.jpg"
+                            src="/images/pos3.jpg"
                             alt=""
                             width={100}
                             height={100}
@@ -49,7 +49,7 @@ const pos_materiale = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-pos/suportPahare">
                         <Image
-                            src="/images/carti_de_vizita.jpg"
+                            src="/images/pos4.jpg"
                             alt=""
                             width={100}
                             height={100}
@@ -62,7 +62,7 @@ const pos_materiale = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-pos/wobblere">
                         <Image
-                            src="/images/tiparituri.jpg"
+                            src="/images/pos5.jpg"
                             alt=""
                             width={100}
                             height={100}
@@ -75,7 +75,7 @@ const pos_materiale = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-pos/tableTent">
                         <Image
-                            src="/images/carti_de_vizita.jpg"
+                            src="/images/pos6.jpg"
                             alt=""
                             width={100}
                             height={100}

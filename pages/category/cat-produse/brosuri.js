@@ -10,7 +10,7 @@ const brosuri = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-brosuri/brosuri">
                         <Image
-                            src="/images/carti_de_vizita.jpg"
+                            src="/images/brosuri1.jpg"
                             alt=""
                             width={100}
                             height={100}
@@ -23,7 +23,7 @@ const brosuri = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-brosuri/brosuri-metalica">
                         <Image
-                            src="/images/tiparituri.jpg"
+                            src="/images/brosuri2.jpg"
                             alt=""
                             width={100}
                             height={100}
@@ -36,7 +36,7 @@ const brosuri = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-brosuri/carti">
                         <Image
-                            src="/images/brosuri_carti_cataloage.jpg"
+                            src="/images/brosuri3.jpg"
                             alt=""
                             width={100}
                             height={100}
@@ -49,7 +49,7 @@ const brosuri = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-brosuri/carti-tare">
                         <Image
-                            src="/images/carnete.jpg"
+                            src="/images/brosuri4.jpg"
                             alt=""
                             width={100} // Aici setați dimensiunea dorită pentru "Printuri Mari"
                             height={100} // Aici setați dimensiunea dorită pentru "Printuri Mari"
@@ -62,7 +62,7 @@ const brosuri = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-brosuri/eurocopertare">
                         <Image
-                            src="/images/photo_printing.jpg"
+                            src="/images/brosuri5.jpg"
                             alt=""
                             width={100}
                             height={100}

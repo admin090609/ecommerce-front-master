@@ -36,7 +36,7 @@ const carti_vizita = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-carti_vizita/UV">
                         <Image
-                            src="/images/brosuri_carti_cataloage.jpg"
+                            src="/images/vizita2.jpg"
                             alt=""
                             width={100}
                             height={100}
@@ -49,7 +49,7 @@ const carti_vizita = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-carti_vizita/kraft">
                         <Image
-                            src="/images/carnete.jpg"
+                            src="/images/vizita3.jpg"
                             alt=""
                             width={100} // Aici setați dimensiunea dorită pentru "Printuri Mari"
                             height={100} // Aici setați dimensiunea dorită pentru "Printuri Mari"
@@ -62,7 +62,7 @@ const carti_vizita = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-carti_vizita/plastic">
                         <Image
-                            src="/images/photo_printing.jpg"
+                            src="/images/vizita4.jpg"
                             alt=""
                             width={100}
                             height={100}
@@ -75,7 +75,7 @@ const carti_vizita = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-carti_vizita/econom">
                         <Image
-                            src="/images/etichete_autocolante.jpg"
+                            src="/images/vizita5.jpg"
                             alt=""
                             width={100}
                             height={100}
@@ -88,7 +88,7 @@ const carti_vizita = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-carti_vizita/suport">
                         <Image
-                            src="/images/stikere_pvc.jpg"
+                            src="/images/vizita6.jpg"
                             alt=""
                             width={100}
                             height={100}
@@ -101,7 +101,7 @@ const carti_vizita = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-carti_vizita/magnet">
                         <Image
-                            src="/images/shopping_bags.jpg"
+                            src="/images/vizita7.jpg"
                             alt=""
                             width={100}
                             height={100}

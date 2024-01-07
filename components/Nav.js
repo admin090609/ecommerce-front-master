@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { useContext } from "react";
 import { CartContext } from "../components/CartContext";
+import Search from "./Search";
 
 export default function Nav() {
   const [nav, setNav] = useState(false);
@@ -77,20 +78,21 @@ export default function Nav() {
         </Link>
 
         <div className="flex items-center">
-          <div className="hidden lg:block">
-            <Image
-              src="/images/search.png"
-              width="25"
-              height="0"
-              className="w-[25px] h-[25px] relative sm:absolute mt-1 sm:mt-3.5 ml-4"
-              alt="Search"
-            />
-            <input
-              type="text"
-              placeholder="Caută..."
-              className="search_bar bg-[#f3f3f3] rounded-[3px] border border-solid border-[#dadada] hidden sm:block sm:w-[175px] lg:w-[250px] h-[50px]"
-            />
-          </div>
+            <div className="hidden lg:block">
+              <Image
+                src="/images/search.png"
+                width="25"
+                height="0"
+                className="w-[25px] h-[25px] relative sm:absolute mt-1 sm:mt-3.5 ml-4"
+                alt="Search"
+              />
+              <input
+                type="text"
+                placeholder="Caută..."
+                className="search_bar bg-[#f3f3f3] rounded-[3px] border border-solid border-[#dadada] hidden sm:block sm:w-[175px] lg:w-[250px] h-[50px]"
+              />
+            </div>
+            <Search />
           <Link href="/cart">
             <Image
               src="/images/cart.png"

@@ -10,7 +10,7 @@ const stickerePVC = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-bags/pungiKraft">
                         <Image
-                            src="/images/carti_de_vizita.jpg"
+                            src="/images/bags1.jpg"
                             alt=""
                             width={100}
                             height={100}
@@ -23,7 +23,7 @@ const stickerePVC = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-bags/pungiStandard">
                         <Image
-                            src="/images/tiparituri.jpg"
+                            src="/images/bags2.jpg"
                             alt=""
                             width={100}
                             height={100}
@@ -36,7 +36,7 @@ const stickerePVC = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-bags/torbeEco">
                         <Image
-                            src="/images/carti_de_vizita.jpg"
+                            src="/images/bags3.jpg"
                             alt=""
                             width={100}
                             height={100}

@@ -10,7 +10,7 @@ const stickerePVC = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-photo/magnetiFoto">
                         <Image
-                            src="/images/carti_de_vizita.jpg"
+                            src="/images/photo1.jpg"
                             alt=""
                             width={100}
                             height={100}
@@ -23,7 +23,7 @@ const stickerePVC = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-photo/magnetiLogo">
                         <Image
-                            src="/images/tiparituri.jpg"
+                            src="/images/photo2.jpg"
                             alt=""
                             width={100}
                             height={100}
@@ -36,7 +36,7 @@ const stickerePVC = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-photo/fotoPuzzle">
                         <Image
-                            src="/images/carti_de_vizita.jpg"
+                            src="/images/photo3.jpg"
                             alt=""
                             width={100}
                             height={100}
@@ -49,7 +49,7 @@ const stickerePVC = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-photo/mouse-pad">
                         <Image
-                            src="/images/tiparituri.jpg"
+                            src="/images/photo4.jpg"
                             alt=""
                             width={100}
                             height={100}
@@ -62,7 +62,7 @@ const stickerePVC = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-photo/pernaFoto">
                         <Image
-                            src="/images/carti_de_vizita.jpg"
+                            src="/images/photo5.jpg"
                             alt=""
                             width={100}
                             height={100}
@@ -75,7 +75,7 @@ const stickerePVC = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-photo/canaAlba">
                         <Image
-                            src="/images/tiparituri.jpg"
+                            src="/images/photo6.jpg"
                             alt=""
                             width={100}
                             height={100}
@@ -88,7 +88,7 @@ const stickerePVC = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-photo/canaCafea">
                         <Image
-                            src="/images/carti_de_vizita.jpg"
+                            src="/images/photo7.jpg"
                             alt=""
                             width={100}
                             height={100}
@@ -101,7 +101,7 @@ const stickerePVC = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-photo/canaInteriorColor">
                         <Image
-                            src="/images/tiparituri.jpg"
+                            src="/images/photo8.jpg"
                             alt=""
                             width={100}
                             height={100}
@@ -114,7 +114,7 @@ const stickerePVC = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-photo/canaFullColor">
                         <Image
-                            src="/images/tiparituri.jpg"
+                            src="/images/photo9.jpg"
                             alt=""
                             width={100}
                             height={100}
@@ -127,7 +127,7 @@ const stickerePVC = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-photo/canaSemiColor">
                         <Image
-                            src="/images/carti_de_vizita.jpg"
+                            src="/images/photo10.jpg"
                             alt=""
                             width={100}
                             height={100}
@@ -140,7 +140,7 @@ const stickerePVC = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-photo/canaChameleon">
                         <Image
-                            src="/images/tiparituri.jpg"
+                            src="/images/photo11.jpg"
                             alt=""
                             width={100}
                             height={100}

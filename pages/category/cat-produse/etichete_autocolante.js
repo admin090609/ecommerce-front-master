@@ -10,7 +10,7 @@ const etichete_autocolante = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-etichete/stickereRotunde">
                         <Image
-                            src="/images/carti_de_vizita.jpg"
+                            src="/images/etichete1.jpg"
                             alt=""
                             width={100}
                             height={100}
@@ -23,7 +23,7 @@ const etichete_autocolante = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-etichete/stickerePatrate">
                         <Image
-                            src="/images/tiparituri.jpg"
+                            src="/images/etichete2.jpg"
                             alt=""
                             width={100}
                             height={100}
@@ -36,7 +36,7 @@ const etichete_autocolante = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-etichete/stickereDreptunghiulare">
                         <Image
-                            src="/images/brosuri_carti_cataloage.jpg"
+                            src="/images/etichete3.jpg"
                             alt=""
                             width={100}
                             height={100}
@@ -49,7 +49,7 @@ const etichete_autocolante = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-etichete/stickereA">
                         <Image
-                            src="/images/carnete.jpg"
+                            src="/images/etichete4.jpg"
                             alt=""
                             width={100} // Aici setați dimensiunea dorită pentru "Printuri Mari"
                             height={100} // Aici setați dimensiunea dorită pentru "Printuri Mari"
@@ -62,7 +62,7 @@ const etichete_autocolante = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-etichete/eticheteCartonStandard">
                         <Image
-                            src="/images/photo_printing.jpg"
+                            src="/images/etichete5.jpg"
                             alt=""
                             width={100}
                             height={100}
@@ -75,7 +75,7 @@ const etichete_autocolante = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-etichete/eticheteCartonPliate">
                         <Image
-                            src="/images/carti_de_vizita.jpg"
+                            src="/images/etichete6.jpg"
                             alt=""
                             width={100}
                             height={100}
@@ -88,7 +88,7 @@ const etichete_autocolante = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-etichete/eticheteCartonSpecial">
                         <Image
-                            src="/images/tiparituri.jpg"
+                            src="/images/etichete7.jpg"
                             alt=""
                             width={100}
                             height={100}
@@ -101,7 +101,7 @@ const etichete_autocolante = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-etichete/eticheteCartonStantate">
                         <Image
-                            src="/images/brosuri_carti_cataloage.jpg"
+                            src="/images/etichete8.jpg"
                             alt=""
                             width={100}
                             height={100}

@@ -10,7 +10,7 @@ const carnete = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-carnete/carneteSpira">
                         <Image
-                            src="/images/carti_de_vizita.jpg"
+                            src="/images/carnete1.jpg"
                             alt=""
                             width={100}
                             height={100}
@@ -23,7 +23,7 @@ const carnete = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-carnete/carneteColor">
                         <Image
-                            src="/images/tiparituri.jpg"
+                            src="/images/carnete2.jpg"
                             alt=""
                             width={100}
                             height={100}
@@ -36,7 +36,7 @@ const carnete = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-carnete/carneteSimple">
                         <Image
-                            src="/images/brosuri_carti_cataloage.jpg"
+                            src="/images/carnete.jpg"
                             alt=""
                             width={100}
                             height={100}
@@ -49,7 +49,7 @@ const carnete = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-carnete/carneteClei">
                         <Image
-                            src="/images/carnete.jpg"
+                            src="/images/carnete4.jpg"
                             alt=""
                             width={100} // Aici setați dimensiunea dorită pentru "Printuri Mari"
                             height={100} // Aici setați dimensiunea dorită pentru "Printuri Mari"
@@ -62,7 +62,7 @@ const carnete = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-carnete/carneteCopertaTare">
                         <Image
-                            src="/images/photo_printing.jpg"
+                            src="/images/carnete5.jpg"
                             alt=""
                             width={100}
                             height={100}

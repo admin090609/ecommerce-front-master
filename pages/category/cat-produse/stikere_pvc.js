@@ -10,7 +10,7 @@ const stickerePVC = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-stickere/stickerePVCcomplet">
                         <Image
-                            src="/images/carti_de_vizita.jpg"
+                            src="/images/sticker1.jpg"
                             alt=""
                             width={100}
                             height={100}
@@ -23,7 +23,7 @@ const stickerePVC = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-stickere/stickerePVCcontur">
                         <Image
-                            src="/images/tiparituri.jpg"
+                            src="/images/sticker2.jpg"
                             alt=""
                             width={100}
                             height={100}

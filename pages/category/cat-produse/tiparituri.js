@@ -10,7 +10,7 @@ const tiparituri = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-tiparituri/flyere">
                         <Image
-                            src="/images/carti_de_vizita.jpg"
+                            src="/images/tiparituri1.jpg"
                             alt=""
                             width={100}
                             height={100}
@@ -23,7 +23,7 @@ const tiparituri = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-tiparituri/postere">
                         <Image
-                            src="/images/tiparituri.jpg"
+                            src="/images/tiparituri2.jpg"
                             alt=""
                             width={100}
                             height={100}
@@ -49,7 +49,7 @@ const tiparituri = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-tiparituri/mape">
                         <Image
-                            src="/images/carnete.jpg"
+                            src="/images/tiparituri3.jpg"
                             alt=""
                             width={100} // Aici setați dimensiunea dorită pentru "Printuri Mari"
                             height={100} // Aici setați dimensiunea dorită pentru "Printuri Mari"
@@ -62,7 +62,7 @@ const tiparituri = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-tiparituri/foi">
                         <Image
-                            src="/images/photo_printing.jpg"
+                            src="/images/tiparituri4.jpg"
                             alt=""
                             width={100}
                             height={100}
@@ -75,7 +75,7 @@ const tiparituri = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-tiparituri/diplome">
                         <Image
-                            src="/images/etichete_autocolante.jpg"
+                            src="/images/tiparituri5.jpg"
                             alt=""
                             width={100}
                             height={100}
@@ -88,7 +88,7 @@ const tiparituri = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-tiparituri/invitatii">
                         <Image
-                            src="/images/stikere_pvc.jpg"
+                            src="/images/tiparituri6.jpg"
                             alt=""
                             width={100}
                             height={100}
@@ -101,7 +101,7 @@ const tiparituri = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-tiparituri/plicuri">
                         <Image
-                            src="/images/shopping_bags.jpg"
+                            src="/images/tiparituri7.jpg"
                             alt=""
                             width={100}
                             height={100}
@@ -114,7 +114,7 @@ const tiparituri = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-tiparituri/bilete">
                         <Image
-                            src="/images/photo_printing.jpg"
+                            src="/images/tiparituri8.jpg"
                             alt=""
                             width={100}
                             height={100}
@@ -127,7 +127,7 @@ const tiparituri = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-tiparituri/semne">
                         <Image
-                            src="/images/etichete_autocolante.jpg"
+                            src="/images/tiparituri9.jpg"
                             alt=""
                             width={100}
                             height={100}
@@ -140,7 +140,7 @@ const tiparituri = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-tiparituri/meniuri">
                         <Image
-                            src="/images/stikere_pvc.jpg"
+                            src="/images/tiparituri10.jpg"
                             alt=""
                             width={100}
                             height={100}
@@ -153,7 +153,7 @@ const tiparituri = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-tiparituri/calendare">
                         <Image
-                            src="/images/shopping_bags.jpg"
+                            src="/images/tiparituri11.jpg"
                             alt=""
                             width={100}
                             height={100}
@@ -166,7 +166,7 @@ const tiparituri = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-tiparituri/calendare_perete">
                         <Image
-                            src="/images/etichete_autocolante.jpg"
+                            src="/images/tiparituri12.jpg"
                             alt=""
                             width={100}
                             height={100}
@@ -179,7 +179,7 @@ const tiparituri = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-tiparituri/calendare_birou">
                         <Image
-                            src="/images/stikere_pvc.jpg"
+                            src="/images/tiparituri13.jpg"
                             alt=""
                             width={100}
                             height={100}
@@ -192,7 +192,7 @@ const tiparituri = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-tiparituri/calendare_buzunar">
                         <Image
-                            src="/images/shopping_bags.jpg"
+                            src="/images/tiparituri14.jpg"
                             alt=""
                             width={100}
                             height={100}

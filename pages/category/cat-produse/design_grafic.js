@@ -10,7 +10,7 @@ const design = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-design/designTiparituri">
                         <Image
-                            src="/images/carti_de_vizita.jpg"
+                            src="/images/design1.jpg"
                             alt=""
                             width={100}
                             height={100}
@@ -23,7 +23,7 @@ const design = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-design/designMarketing">
                         <Image
-                            src="/images/tiparituri.jpg"
+                            src="/images/design2.jpg"
                             alt=""
                             width={100}
                             height={100}
@@ -36,7 +36,7 @@ const design = () => {
                 <div className="product-card">
                     <Link href="/category/cat-produse/cat-design/designPOS">
                         <Image
-                            src="/images/carti_de_vizita.jpg"
+                            src="/images/design3.jpg"
                             alt=""
                             width={100}
                             height={100}
