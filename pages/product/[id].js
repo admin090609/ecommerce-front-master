@@ -233,13 +233,13 @@ export default function ProductPage({ product, cartProducts, _id, title: existin
       <div className="flex justify-center">
         <div className="max-w-7xl md:flex block">
           {/* Div Images + Descriere */}
-          <div>
+          <div >
             {/* Images */}
             <WhiteBox>
               <ProductImages images={product.images} />
             </WhiteBox>
             {/* Descriere */}
-            <div className="p-[30px] "><div className="text-xl font-semibold">Descriere:</div> {product.description}</div>
+            <div className="p-[30px] max-w-2xl text-gray-500 leading-5"><div className="text-2xl text-black font-semibold mb-2">Descriere:</div> {product.description}</div>
           </div>
           {/* Optiuni */}
           <div className="p-6">

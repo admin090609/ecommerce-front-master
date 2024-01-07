@@ -1,14 +1,72 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
+import { useRouter } from "next/router";
 import { CartContext } from "../components/CartContext";
-import Search from "./Search";
 
 export default function Nav() {
   const [nav, setNav] = useState(false);
   const { cartProducts } = useContext(CartContext);
   const [mobileNavActive, setMobileNavActive] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [emptyQuery, setEmptyQuery] = useState(false);
+  const router = useRouter();
+
+  const handleSearchInputChange = async (e) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+
+    if (query.trim()) {
+      const searchResponse = await fetch(`/api/search?q=${encodeURIComponent(query)}&limit=5`);
+      const results = await searchResponse.json();
+      setSearchResults(results);
+      setEmptyQuery(false);
+    } else {
+      setSearchResults([]);
+      setEmptyQuery(true);
+    }
+  };
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    handleSearchButtonClick();
+  };
+
+  const handleSearchButtonClick = () => {
+    if (searchQuery.trim()) {
+      router.push(`/search?q=${encodeURIComponent(searchQuery)}`);
+    } else {
+      setEmptyQuery(true);
+    }
+
+    setSearchResults([]);
+    setSearchQuery('');
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      const searchContainer = document.getElementById('search-container');
+
+      if (
+        searchContainer &&
+        !searchContainer.contains(e.target) &&
+        !e.target.classList.contains('search-input') &&
+        !e.target.classList.contains('search-results')
+      ) {
+        // Click occurred outside the search bar and results list, close the list
+        setSearchResults([]);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
+
 
   const totalQuantity = cartProducts.reduce((acc, cartItem) => {
     return acc + (cartItem.quantity || 1); // Assuming each item has a 'quantity' property
@@ -17,6 +75,8 @@ export default function Nav() {
   const handleNav = () => {
     setNav(!nav);
   };
+
+
   return (
     <>
       <div className="flex mt-6 justify-between items-center max-w-[1240px] m-auto">
@@ -78,21 +138,55 @@ export default function Nav() {
         </Link>
 
         <div className="flex items-center">
-            <div className="hidden lg:block">
-              <Image
-                src="/images/search.png"
-                width="25"
-                height="0"
-                className="w-[25px] h-[25px] relative sm:absolute mt-1 sm:mt-3.5 ml-4"
-                alt="Search"
-              />
-              <input
-                type="text"
-                placeholder="Caută..."
-                className="search_bar bg-[#f3f3f3] rounded-[3px] border border-solid border-[#dadada] hidden sm:block sm:w-[175px] lg:w-[250px] h-[50px]"
-              />
-            </div>
-            <Search />
+          <div className="hidden lg:block z-20" id="search-container">
+            <form onSubmit={handleSearchSubmit}>
+              <div className="flex items-center">
+                <input
+                  type="text"
+                  placeholder="Caută..."
+                  value={searchQuery}
+                  onChange={handleSearchInputChange}
+                  className="search_bar bg-[#f3f3f3] rounded-[3px] border border-solid border-[#dadada] sm:w-[175px] lg:w-[300px] h-[50px] mr-2 search-input"
+                />
+                <button type="submit" className="absolute mb-1 ml-2 search-button">
+                  <Image
+                    src="/images/search.png"
+                    width="25"
+                    height="0"
+                    className="w-[25px] h-[25px] relative mt-1 ml-2"
+                    alt="Search"
+                  />
+                </button>
+              </div>
+            </form>
+
+            {emptyQuery && (
+              <div className="absolute bg-gray-200 rounded-md px-3 py-2 sm:w-[175px] lg:w-[300px] border border-solid border-[#dadada] search-results">
+                <p>Bara de căutare este goală.</p>
+              </div>
+            )}
+            {searchResults.length > 0 && (
+              <div className="absolute bg-gray-200 rounded-md px-3 py-2 sm:w-[175px] lg:w-[300px] border border-solid border-[#dadada] search-results">
+                <div className="text-gray-500 text-sm">Search Results:</div>
+                <ul>
+                  {searchResults.map((result) => (
+                    <li key={result._id}>
+                      <Link href={`/product/${result._id}`} className="flex mb-3 gap-2 rounded-md hover:bg-gray-300">
+                        <div className="w-[80px] h-[70px] overflow-hidden items-center flex border-2 border-gray-300 rounded-md"><img src={result.images[0]} className="object-contain" /></div>
+                        <div className="mt-1 leading-4">
+                          <h4>{result.title}</h4>
+                          <div className="w-[200px] h-[50px] overflow-hidden">
+                            <p className="text-xs text-gray-500 leading-4">{result.description}</p>
+                          </div>
+                        </div>
+                      </Link>
+                      {/* Add any other information you want to display */}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
           <Link href="/cart">
             <Image
               src="/images/cart.png"
