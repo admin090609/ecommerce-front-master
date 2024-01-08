@@ -141,9 +141,13 @@ export default function ProductPage({ product, cartProducts, _id, title: existin
       return;
     }
 
- 
+    const selectedProductOptionsArray = Object.values(selectedProductOptions);
 
-
+    if (selectedProductOptionsArray.length < product.options.length) {
+      // Show an error pop-up indicating that options need to be selected
+      setErrorMessage(`Vă rugăm să alegeți toate opțiunile.`);
+      return;
+    }
 
     addProduct(product._id, selectedOptions, product, newImages, images);
     router.push({
