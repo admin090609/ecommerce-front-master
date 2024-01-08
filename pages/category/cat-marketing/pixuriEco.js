@@ -1,4 +1,4 @@
-import React from "react";
+ import React from "react";
 import Link from "next/link";
 import { Product } from "../../../models/Product";
 import { Category } from "../../../models/Category";
@@ -8,11 +8,11 @@ const PixuriEco = ({ products }) => {
   return (
     <div className="flex flex-col items-center">
       <h1 className="text-3xl mb-8">Pixuri Eco</h1>
-      <ul className="flex items-center gap-4">
+      <ul className="flex items-center gap-4 flex-wrap justify-center">
         {products.map((product) => (
           <li key={product._id} >
             <Link href={`/product/${product._id}`}>
-              <div className="h-40 w-60 flex items-center justify-center border-2 border-[#ccc] rounded-md overflow-hidden">
+              <div className="h-40 md:w-60 w-40  flex  items-center justify-center border-2 border-[#ccc] rounded-md overflow-hidden">
                 <img
                   src={product.images?.[0]}
                   alt={product.title}

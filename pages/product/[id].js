@@ -130,11 +130,20 @@ export default function ProductPage({ product, cartProducts, _id, title: existin
       }
     });
 
-    if (unchosenOptions.length > 4) {
-      // Show an error pop-up with the list of unchosen options
-      setErrorMessage(`Vă rugăm să alegeți opțiunile pentru: ${unchosenOptions.join(', ')}.`);
+    console.log(selectedOptions)
+
+    const selectedProductOptions = selectedOptions[product._id];
+
+    // Check if there are any selected options for the specific product
+    if (!selectedProductOptions || Object.values(selectedProductOptions).length === 0) {
+      // Show an error pop-up indicating that options need to be selected
+      setErrorMessage(`Vă rugăm să alegeți cel opțiunile pentru: ${unchosenOptions.join(', ')}.`);
       return;
     }
+
+ 
+
+
 
     addProduct(product._id, selectedOptions, product, newImages, images);
     router.push({

@@ -14,6 +14,10 @@ export default function Nav() {
   const [emptyQuery, setEmptyQuery] = useState(false);
   const router = useRouter();
 
+  const closeMobileMenu = () => {
+    setNav(false);
+  };
+
   const handleSearchInputChange = async (e) => {
     const query = e.target.value;
     setSearchQuery(query);
@@ -43,6 +47,7 @@ export default function Nav() {
 
     setSearchResults([]);
     setSearchQuery('');
+    closeMobileMenu();
   };
 
   useEffect(() => {
@@ -81,7 +86,7 @@ export default function Nav() {
     <>
       <div className="flex mt-6 justify-between items-center max-w-[1240px] m-auto">
         <div className="flex justify-center items-center">
-          <Link href="/">
+          <Link href="/" >
             <Image
               src="/images/logo_alb.jpg"
               alt="Logo"
@@ -187,7 +192,7 @@ export default function Nav() {
               </div>
             )}
           </div>
-          <Link href="/cart">
+          <Link href="/cart" >
             <Image
               src="/images/cart.png"
               alt="Cart"
@@ -214,59 +219,67 @@ export default function Nav() {
               <div id="bar3" className="bars"></div>
             </label>
             <div className={`mobile-menu ${nav ? "active" : ""}`}>
-              <div className="block">
-                <Image
-                  src="/images/search.png"
-                  width="25"
-                  height="0"
-                  className="w-[25px] h-[25px] relative sm:absolute mt-1 sm:mt-3.5 ml-0 lg:ml-4"
-                  alt="Search"
-                />
-                <input
-                  type="text"
-                  placeholder="Caută..."
-                  className="search_bar bg-[#f3f3f3] rounded-[3px] border border-solid border-[#dadada] hidden sm:block sm:w-[175px] lg:w-[250px] h-[50px]"
-                />
+              <div className="block mb-2">
+                <form onSubmit={handleSearchSubmit}>
+                  <div className="flex items-center">
+                    <input
+                      type="text"
+                      placeholder="Caută..."
+                      value={searchQuery}
+                      onChange={handleSearchInputChange}
+                      className="search_bar bg-[#f3f3f3] rounded-[3px] border border-solid border-[#dadada] sm:w-[175px] lg:w-[300px] h-[50px] mr-2 search-input"
+                    />
+                    <button type="submit" className="absolute mb-1 ml-2 search-button">
+                      <Image
+                        src="/images/search.png"
+                        width="25"
+                        height="0"
+                        className="w-[25px] h-[25px] relative mt-1 ml-2"
+                        alt="Search"
+                      />
+                    </button>
+                  </div>
+                </form>
               </div>
               <div className="relative transition-all duration-300 ease-in-out">
                 <Link
                   className="font-bold text-xl mt-4"
-                  href="/category/produse"
+                  href="/category/produse" onClick={closeMobileMenu}
                 >
                   Produse
                 </Link>
               </div>
-              <Link
+              <Link onClick={closeMobileMenu}
                 className="font-bold text-xl mt-4"
                 href="/category/marketing"
               >
                 Materiale Marketing
               </Link>
-              <Link className="font-bold text-xl mt-4" href="/category/textile">
+              <Link className="font-bold text-xl mt-4" href="/category/textile" onClick={closeMobileMenu}>
                 Textile
               </Link>
               <Link
                 className="font-bold text-xl mt-4"
-                href="/category/standuri"
+                href="/category/standuri" onClick={closeMobileMenu}
               >
                 Standuri Expozitionale
               </Link>
               <Link
                 className="font-bold text-xl mt-4"
-                href="/category/printuri"
+                href="/category/printuri" onClick={closeMobileMenu}
               >
                 Printuri Mari
               </Link>
               <Link
                 className="font-bold text-xl mt-4"
-                href="/category/servicii"
+                href="/category/servicii" onClick={closeMobileMenu}
               >
                 Servicii
               </Link>
-              <Link className="font-bold text-xl mt-4" href="/contacte">
+              <Link className="font-bold text-xl mt-4" href="/contacte" onClick={closeMobileMenu}>
                 Contacte
               </Link>
-              <Link className="font-bold text-xl mt-4" href="/faq">
+              <Link className="font-bold text-xl mt-4" href="/faq" onClick={closeMobileMenu}>
                 FAQ
               </Link>
             </div>
