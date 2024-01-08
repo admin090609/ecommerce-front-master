@@ -140,7 +140,7 @@ export default function ProductPage({ product, cartProducts, _id, title: existin
       setErrorMessage(`Vă rugăm să alegeți cel opțiunile pentru: ${unchosenOptions.join(', ')}.`);
       return;
     }
-
+ 
     const selectedProductOptionsArray = Object.values(selectedProductOptions);
 
     if (selectedProductOptionsArray.length < product.options.length) {
